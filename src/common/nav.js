@@ -34,6 +34,8 @@ import Register from '../routes/User/Register';
 import RegisterResult from '../routes/User/RegisterResult';
 
 import TaskList from '../routes/Task/TaskList';
+import StepAddTask from '../routes/Task/StepAddTask';
+import AddTaskStep2 from '../routes/Task/StepAddTask/Step2';
 
 const data = [{
   component: BasicLayout,
@@ -66,9 +68,13 @@ const data = [{
       path: 'list',
       component: TaskList,
     }, {
-      name: '任务分配',
-      path: 'dispath',
-      // component: TaskDispath,
+      name: '添加下单',
+      path: 'step_add_task',
+      component: StepAddTask,
+      children: [{
+        path: 'step2',
+        component: AddTaskStep2,
+      }],
     }],
   }, {
     name: '表单页',

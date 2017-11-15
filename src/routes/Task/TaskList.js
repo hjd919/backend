@@ -156,6 +156,19 @@ export default class TaskList extends PureComponent {
   }
 
   handleAdd = () => {
+    console.log('handleAdd')
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      console.log(values)
+      return false;
+      if (!err) {
+        this.props.dispatch({
+          type: 'task/add',
+          payload: values,
+        });
+      }
+    });
+    return false
+    
     this.props.dispatch({
       type: 'task/add',
       payload: {
@@ -282,7 +295,7 @@ export default class TaskList extends PureComponent {
   }
 
   render() {
-    const { task: { loading: loading, data } } = this.props;
+    const { task: { loading: loading, data }, form: { getFieldDecorator, getFieldValue } } = this.props;
     const { selectedRows, modalVisible, addInputValue } = this.state;
 
     const menu = (
@@ -312,7 +325,12 @@ export default class TaskList extends PureComponent {
       },
       {
         title: '创建时间',
-        dataIndex: 'create_time',
+        dataIndex: 'created_at',
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      },
+      {
+        title: '修改时间',
+        dataIndex: 'updated_at',
         render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
@@ -325,15 +343,28 @@ export default class TaskList extends PureComponent {
       },
     ];
 
+    // 设置form_style
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 7 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 12 },
+        md: { span: 10 },
+      },
+    };
+
     return (
-      <PageHeaderLayout title="查询表格">
+      <PageHeaderLayout title="下单列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
               {this.renderForm()}
             </div>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>新建</Button>
+              <Link to="/task/step_add_task"><Button icon="plus" type="primary">新建</Button></Link>
               {
                 selectedRows.length > 0 && (
                   <span>
@@ -358,18 +389,41 @@ export default class TaskList extends PureComponent {
           </div>
         </Card>
         <Modal
-          title="新建规则"
+          title="新建"
           visible={modalVisible}
           onOk={this.handleAdd}
           onCancel={() => this.handleModalVisible()}
         >
-          <FormItem
-            labelCol={{ span: 5 }}
-            wrapperCol={{ span: 15 }}
-            label="描述"
+          <Form
+            onSubmit={this.handleAdd}
+            hideRequiredMark
+            style={{ marginTop: 8 }}
           >
-            <Input placeholder="请输入" onChange={this.handleAddInput} value={addInputValue} />
-          </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="app名称"
+            >
+              {getFieldDecorator('app_name', {
+                rules: [{
+                  required: true, message: '必填',
+                }],
+              })(
+                <Input placeholder="请输入app名称" />
+                )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="appid"
+            >
+              {getFieldDecorator('appid', {
+                rules: [{
+                  required: true, message: '必填',
+                }],
+              })(
+                <Input placeholder="请输入appid" />
+                )}
+            </FormItem>
+          </Form>
         </Modal>
       </PageHeaderLayout>
     );

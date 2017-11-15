@@ -1,5 +1,6 @@
-import { queryTask } from '../services/task';
+import { queryTask, saveApp } from '../services/task';
 import { removeRule, addRule } from '../services/api';
+import { routerRedux } from 'dva/router';
 
 export default {
   namespace: 'task',
@@ -8,6 +9,11 @@ export default {
     data: {
       list: [],
       pagination: {},
+    },
+    task: {
+      ios_app_id:0,
+      keywords:{},
+      data:{}
     },
     loading: true,
   },
@@ -27,6 +33,16 @@ export default {
         type: 'changeLoading',
         payload: false,
       });
+    },
+    *saveApp({ payload }, { call, put }) {
+      const response = yield call(saveApp, payload);
+
+      yield put({
+        type: 'saveAppSuccess',
+        payload: response.ios_app_id,
+      });
+
+      yield put(routerRedux.push('/task/step_add_task/step2'));
     },
     *add({ payload, callback }, { call, put }) {
       yield put({
@@ -70,6 +86,14 @@ export default {
         ...state,
         data: action.payload,
       };
+    },
+    saveAppSuccess(state, action) {
+      return {
+        ...state,
+        task: {
+          ios_app_id: action.payload
+        },
+      }
     },
     changeLoading(state, action) {
       return {
