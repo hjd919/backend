@@ -70,6 +70,8 @@ export default {
         if (typeof window.ga !== 'undefined') {
           window.ga('send', 'pageview', pathname + search);
         }
+
+        console.log('time',(new Date).getTime())
       });
     },
   },

@@ -4,9 +4,6 @@ import { routerRedux } from 'dva/router';
 import styles from './style.less';
 import { requestAuthApi } from '../../../utils/request';
 
-
-const { Option } = Select;
-
 export default class Step1 extends PureComponent {
   constructor(props) {
     super(props)
@@ -36,7 +33,7 @@ export default class Step1 extends PureComponent {
       validateFields((err, values) => {
         if (!err) {
           dispatch({
-            type: 'task/saveApp',
+            type: 'task/save',
             payload: values,
           });
         }
