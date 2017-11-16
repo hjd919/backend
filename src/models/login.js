@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 
-import { accountLogin, fakeMobileLogin } from '../services/api';
+import { refreshToken, accountLogin, fakeMobileLogin } from '../services/api';
 
 export default {
   namespace: 'login',
@@ -10,19 +10,36 @@ export default {
   },
 
   effects: {
+    *refreshToken({ }, { call, put }) {
+      const response = yield call(refreshToken);
+      const { access_token, expires_in } = response
+      if (!access_token || !expires_in) {
+        return false
+      }
+      
+      if (!response.status && response.status !== 'error') {
+        response.status = 'success'
+        response.type = 'account'
+      }
+
+      yield put({
+        type: 'changeLoginStatus',
+        payload: response,
+      });
+    },
     *accountSubmit({ payload }, { call, put }) {
       yield put({
         type: 'changeSubmitting',
         payload: true,
       });
       const response = yield call(accountLogin, payload);
-      
+
       // 判断是否登录成功
       if (!response.status && response.status !== 'error') {
         response.status = 'success'
         response.type = 'account'
       }
-      
+
       yield put({
         type: 'changeLoginStatus',
         payload: response,
@@ -34,9 +51,9 @@ export default {
 
       // 成功则跳转
       if (response.status == 'success') {
-        
+
         // 判断是否存在from，则跳转到from
-        if (location.search){
+        if (location.search) {
           const search = querystring.parse(location.search)
           if (search.from) {
             yield put(routerRedux.push(from))
@@ -75,16 +92,16 @@ export default {
   },
 
   reducers: {
-    changeLoginStatus(state, { payload }) {
+    changeLoginStatus(state, { payload: { access_token, expires_in, status, type } }) {
 
       // 在localStorage添加登录凭证
-      localStorage.token = payload.access_token 
-      localStorage.token_expire = (new Date).getTime() + payload.expires_in * 1000
+      localStorage.token = access_token
+      localStorage.token_expire = (new Date).getTime() + expires_in * 1000
 
       return {
         ...state,
-        status: payload.status,
-        type: payload.type,
+        status,
+        type,
       };
     },
     changeSubmitting(state, { payload }) {

@@ -53,9 +53,7 @@ export default {
       // 获取不到token,没有登录，则跳转到登录页
       if (!token) {
         let from = location.pathname
-        console.log('from.pathname',from)
         yield put(routerRedux.push('/user/login?from=' + from))
-        console.log('location.pathname',location.pathname)
         return false
       }
 

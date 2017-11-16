@@ -1,4 +1,5 @@
 import { queryNotices } from '../services/api';
+import { routerRedux } from 'dva/router';
 
 export default {
   namespace: 'global',
@@ -64,14 +65,19 @@ export default {
   },
 
   subscriptions: {
-    setup({ history }) {
+    setup({ dispatch, history }) {
       // Subscribe history(url) change, trigger `load` action if pathname is `/`
       return history.listen(({ pathname, search }) => {
         if (typeof window.ga !== 'undefined') {
           window.ga('send', 'pageview', pathname + search);
         }
 
-        console.log('time',(new Date).getTime())
+        // 判断是否过期，过期则跳转登录
+        const token_expire = localStorage.token_expire
+        if (token_expire && token_expire - (new Date).getTime() <= 120000) {
+          let from = location.pathname
+          dispatch(routerRedux.push('/user/login?from=' + from))
+        }
       });
     },
   },

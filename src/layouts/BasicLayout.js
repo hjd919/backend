@@ -69,6 +69,14 @@ class BasicLayout extends React.PureComponent {
   }
   componentWillUnmount() {
     clearTimeout(this.resizeTimeout);
+
+    // bug:判断是否快过期（1分钟 60000），快过期则刷新token 多个异步请求无法兼容
+    // const token_expire = localStorage.token_expire
+    //   console.log('aaa')
+    //   if (token_expire && token_expire - (new Date).getTime() <= 1000) {
+    //   console.log('aaa')
+    //   this.props.dispatch({ type: 'login/refreshToken' })
+    // }
   }
   onCollapse = (collapsed) => {
     this.props.dispatch({
@@ -139,10 +147,10 @@ class BasicLayout extends React.PureComponent {
                 {icon}<span>{item.name}</span>
               </a>
             ) : (
-              <Link to={itemPath} target={item.target}>
-                {icon}<span>{item.name}</span>
-              </Link>
-            )
+                <Link to={itemPath} target={item.target}>
+                  {icon}<span>{item.name}</span>
+                </Link>
+              )
           }
         </Menu.Item>
       );

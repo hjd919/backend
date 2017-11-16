@@ -1,6 +1,6 @@
 import { stringify } from 'qs';
 
-import request, { requestApi } from '../utils/request';
+import request, { requestApi, requestAuthApi } from '../utils/request';
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
@@ -91,4 +91,8 @@ export async function accountLogin(params) {
     method: 'POST',
     body: params,
   });
+}
+
+export async function refreshToken() {
+  return requestAuthApi('/backend/auth/refresh');
 }
