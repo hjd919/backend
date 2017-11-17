@@ -23,12 +23,14 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import StandardTable from '../../components/StandardTable';
 import styles from './TaskList.less';
 
+import querystring from 'querystring';
+
 const FormItem = Form.Item;
 const { Option } = Select;
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
 @connect(state => ({
-  task: state.task,
+  task_keyword: state.task_keyword,
 }))
 @Form.create()
 export default class TaskList extends PureComponent {
@@ -41,9 +43,17 @@ export default class TaskList extends PureComponent {
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, location } = this.props;
+
+    // 从url获取查询参数
+    let query_params = {};
+    if (location.search) {
+      query_params = querystring.parse(location.search.replace('?',''))
+    }
+
     dispatch({
-      type: 'task/fetch',
+      type: 'task_keyword/fetch',
+      payload: query_params,
     });
   }
 
@@ -295,7 +305,7 @@ export default class TaskList extends PureComponent {
   }
 
   render() {
-    const { task: { loading: loading, data }, form: { getFieldDecorator, getFieldValue } } = this.props;
+    const { task_keyword: { loading: loading, data }, form: { getFieldDecorator, getFieldValue } } = this.props;
     const { selectedRows, modalVisible, addInputValue } = this.state;
 
     const menu = (
@@ -309,45 +319,55 @@ export default class TaskList extends PureComponent {
     const columns = [
       {
         fixed: 'left',
-        width:80,
-        title: '下单id',
-        dataIndex: 'id',
+        width: 100,
+        title: 'task_id',
+        dataIndex: 'task_id',
       },
       {
-        fixed: 'left',
-        width:100,
+        fixed: 'left', 
+        width: 100,
         title: 'appid',
         dataIndex: 'appid',
       },
       {
-        title: 'app名称',
-        dataIndex: 'app_name',
+        title: '下单人',
+        dataIndex: 'user_name',
       },
       {
-        title: '下单总量',
-        dataIndex: 'total_num',
+        title: '关键词',
+        dataIndex: 'keyword',
       },
       {
-        title: '创建时间',
+        title: '量级',
+        dataIndex: 'success_num',
+      },
+      {
+        title: '上量开始',
+        dataIndex: 'start_time',
+      },
+      {
+        title: '手机数量',
+        dataIndex: 'mobile_num',
+      },
+      {
+        title: '上量前排名',
+        dataIndex: 'before_rank',
+      },
+      {
+        title: '热度',
+        dataIndex: 'hot',
+      },
+      {
+        title: '添加时间',
         dataIndex: 'created_at',
         render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
-        title: '修改时间',
-        dataIndex: 'updated_at',
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
-        title: '操作',        
-        width:270,
         fixed: 'right',
+        title: '操作',
         render: (text, record) => (
           <p>
-            <Link to={"/task/list/add_task_keyword?task_id=" + record.id}>新增关键词</Link>
-            <span className={styles.splitLine} />
-            <Link to={"/task_keyword/list?task_id=" + record.id}>关键词列表</Link>
-            <span className={styles.splitLine} />
-            <Link to={"/app/list?task_id=" + record.id}>任务列表</Link>
+            <Link to="/task_keyword/list">修改</Link>
           </p>
         ),
       },
@@ -391,7 +411,8 @@ export default class TaskList extends PureComponent {
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
-              data={data} 
+              id="task_keyword"
+              data={data}
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}

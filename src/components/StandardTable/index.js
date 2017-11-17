@@ -44,6 +44,10 @@ class StandardTable extends PureComponent {
     const { selectedRowKeys, totalCallNo } = this.state;
     const { data: { list, pagination }, loading, columns } = this.props;
 
+    for(let row of list) {
+      row.key = row.id
+    }
+
     const status = ['关闭', '运行中', '已上线', '异常'];
 
     if (columns == 'undefined') {
@@ -147,6 +151,7 @@ class StandardTable extends PureComponent {
           columns={columns}
           pagination={paginationProps}
           onChange={this.handleTableChange}
+          scroll={{ x: 1300 }}
         />
       </div>
     );

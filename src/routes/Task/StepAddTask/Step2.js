@@ -27,7 +27,6 @@ export default class Step2 extends PureComponent {
   }
 
   onBlurMobileNum = (e) => {
-    console.log('onBlurMobileNum')
     // 判断手机数量是否足够
     const { free_mobile_num } = this.props.task.form
 
@@ -58,7 +57,6 @@ export default class Step2 extends PureComponent {
             type: 'task/saveTaskKeyword',
             payload: values,
           }).then((res) => {
-            console.log('dispatcres', res)
             message.success('添加成功', 2, () => {
               dispatch(routerRedux.push('/task/list'))
             })
@@ -164,7 +162,7 @@ export default class Step2 extends PureComponent {
             label=""
           >
             <Button type="primary" onClick={onValidateForm}>
-              下一步
+              提交
           </Button>
           </FormItem>
         </Form>

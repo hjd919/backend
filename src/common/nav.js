@@ -37,6 +37,9 @@ import TaskList from '../routes/Task/TaskList';
 import StepAddTask from '../routes/Task/StepAddTask';
 import AddTaskStep2 from '../routes/Task/StepAddTask/Step2';
 
+import TaskKeywordList from '../routes/TaskKeyword/TaskKeywordList';
+
+
 const data = [{
   component: BasicLayout,
   layout: 'BasicLayout',
@@ -50,14 +53,14 @@ const data = [{
       name: '分析页',
       path: 'analysis',
       component: Analysis,
-    // }, {
-    //   name: '监控页',
-    //   path: 'monitor',
-    //   component: Monitor,
-    // }, {
-    //   name: '任务管理',
-    //   path: 'task',
-    //   component: TaskList,
+      // }, {
+      //   name: '监控页',
+      //   path: 'monitor',
+      //   component: Monitor,
+      // }, {
+      //   name: '任务管理',
+      //   path: 'task',
+      //   component: TaskList,
     }],
   }, {
     name: '下单管理',
@@ -67,6 +70,10 @@ const data = [{
       name: '下单列表',
       path: 'list',
       component: TaskList,
+      children: [{
+        path: 'add_task_keyword',
+        component: TaskKeywordList,
+      }],
     }, {
       name: '新建下单',
       path: 'step_add_task',
@@ -75,6 +82,15 @@ const data = [{
         path: 'step2',
         component: AddTaskStep2,
       }],
+    }],
+  }, {
+    name: '关键词管理',
+    path: 'task_keyword',
+    icon: 'table',
+    children: [{
+      name: '关键词列表',
+      path: 'list',
+      component: TaskKeywordList,
     }],
   }, {
     name: '表单页',

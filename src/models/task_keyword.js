@@ -1,4 +1,4 @@
-import { queryTask, saveTask, getFreeMobileNum } from '../services/task';
+import { queryTaskKeyword, saveTask, getFreeMobileNum } from '../services/task';
 import { removeRule, addRule } from '../services/api';
 import { routerRedux } from 'dva/router';
 
@@ -6,7 +6,11 @@ export default {
   namespace: 'task_keyword',
 
   state: {
-   
+    data: {
+      list: [],
+      pagination: {},
+    },
+    loading: true,
   },
 
   effects: {
@@ -15,7 +19,7 @@ export default {
         type: 'changeLoading',
         payload: true,
       });
-      const response = yield call(queryTask, payload);
+      const response = yield call(queryTaskKeyword, payload);
       yield put({
         type: 'fetchSuccess',
         payload: response,
@@ -32,6 +36,12 @@ export default {
       return {
         ...state,
         data: action.payload,
+      };
+    },
+    changeLoading(state, action) {
+      return {
+        ...state,
+        loading: action.payload,
       };
     },
   },
