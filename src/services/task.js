@@ -14,3 +14,10 @@ export async function saveTask(params) {
 export async function getFreeMobileNum() {
   return requestAuthApi('/backend/task/getFreeMobileNum');
 }
+
+export async function saveTaskKeyword(params) {
+  return requestAuthApi('/backend/task/saveTaskKeyword', {
+    method: 'POST',
+    body: params,
+  });
+}

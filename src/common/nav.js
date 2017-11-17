@@ -68,7 +68,7 @@ const data = [{
       path: 'list',
       component: TaskList,
     }, {
-      name: '添加下单',
+      name: '新建下单',
       path: 'step_add_task',
       component: StepAddTask,
       children: [{

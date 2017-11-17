@@ -1,6 +1,6 @@
-import { queryTask, saveTask, getFreeMobileNum } from '../services/task';
-import { removeRule, addRule } from '../services/api';
+import { queryTask, saveTask, getFreeMobileNum, saveTaskKeyword } from '../services/task';
 import { routerRedux } from 'dva/router';
+import { message } from 'antd';
 
 export default {
   namespace: 'task',
@@ -13,7 +13,7 @@ export default {
     form: {
       task_id: 0,
       keywords: {},
-      free_mobile_num: 0
+      free_mobile_num: 0,
     },
     loading: true,
   },
@@ -52,6 +52,14 @@ export default {
         payload: response.free_mobile_num,
       });
     },
+    *saveTaskKeyword({ payload }, { call, put }) {
+      const response = yield call(saveTaskKeyword, payload);
+      const { error_code, message } = response
+      if (error_code) {
+        message.error(message)
+        return false;
+      }      
+    }
   },
 
   reducers: {
@@ -65,6 +73,7 @@ export default {
       return {
         ...state,
         form: {
+          ...state.form,
           free_mobile_num: action.payload
         },
       };
@@ -73,7 +82,8 @@ export default {
       return {
         ...state,
         form: {
-          task_id: action.payload
+          ...state.form,
+          task_id: action.payload,
         },
       }
     },

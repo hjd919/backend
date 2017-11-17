@@ -1,37 +1,68 @@
 import React, { PureComponent } from 'react';
-import { Form, Input, Button, InputNumber } from 'antd';
+import {
+  Form,
+  Input,
+  Button,
+  InputNumber,
+  DatePicker,
+  TimePicker
+} from 'antd';
 import { routerRedux } from 'dva/router';
 import styles from './style.less';
+import { message } from 'antd';
+import moment from 'moment';
 
 const FormItem = Form.Item;
+const InputGroup = Input.Group;
 
 const { TextArea } = Input;
 
 export default class Step2 extends PureComponent {
   componentWillMount() {
-    console.log('111')
-    console.log(this.props)
+
     // 获取手机空闲数
     this.props.dispatch({
-      type:'task/getFreeMobileNum'
+      type: 'task/getFreeMobileNum'
     })
   }
 
-  onBlurMobileNum = () => {
+  onBlurMobileNum = (e) => {
     console.log('onBlurMobileNum')
     // 判断手机数量是否足够
+    const { free_mobile_num } = this.props.task.form
+
+    const input_mobile_num = e.target.value
+
+    if (input_mobile_num > free_mobile_num) {
+      message.error('不能超过空闲手机数，最大可填' + free_mobile_num);
+      return false
+    }
   }
 
   render() {
-    const { formItemLayout, form, dispatch } = this.props
+    const { formItemLayout, form, dispatch, task: { form: { free_mobile_num, task_id } } } = this.props
     const { getFieldDecorator, validateFields } = form;
     const onValidateForm = () => {
       validateFields((err, values) => {
+
+        // 构造日期
+        values.start_time = values.start_time_date.format('YYYY-MM-DD') + ' ' + values.start_time_time.format('HH:mm:00')
+        delete values.start_time_date
+        delete values.start_time_time
+
+        // 附带任务id:task_id
+        values.task_id = task_id
+
         if (!err) {
           dispatch({
-            type: 'task/save',
+            type: 'task/saveTaskKeyword',
             payload: values,
-          });
+          }).then((res) => {
+            console.log('dispatcres', res)
+            message.success('添加成功', 2, () => {
+              dispatch(routerRedux.push('/task/list'))
+            })
+          })
         }
       });
     };
@@ -65,16 +96,25 @@ export default class Step2 extends PureComponent {
             {...formItemLayout}
             label="开始时间"
           >
-            {getFieldDecorator('start_time', {
-              initialValue: '',
-              rules: [{ required: true, message: '请填写信息' }],
-            })(
-              <Input placeholder="必填" />
-              )}
+            <InputGroup compact>
+              {getFieldDecorator('start_time_date', {
+                initialValue: moment(),
+                rules: [{ required: true, message: '请填写信息' }],
+              })(
+                <DatePicker />
+                )}
+              {getFieldDecorator('start_time_time', {
+                initialValue: moment(),
+                rules: [{ required: true, message: '请填写信息' }],
+              })(
+                <TimePicker format='HH:mm' />
+                )}
+            </InputGroup>
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label="手机数"
+            label="投入手机数"
+            help={"总手机数:" + free_mobile_num}
           >
             {getFieldDecorator('mobile_num', {
               initialValue: '',
@@ -91,7 +131,7 @@ export default class Step2 extends PureComponent {
               initialValue: '',
               rules: [{ required: true, message: '请填写信息' }],
             })(
-              <Input placeholder="必填" />
+              <InputNumber placeholder="必填" min={0} />
               )}
           </FormItem>
           <FormItem
@@ -102,7 +142,7 @@ export default class Step2 extends PureComponent {
               initialValue: '',
               rules: [{ required: true, message: '请填写信息' }],
             })(
-              <Input placeholder="必填" />
+              <InputNumber placeholder="必填" min={0} />
               )}
           </FormItem>
           <FormItem

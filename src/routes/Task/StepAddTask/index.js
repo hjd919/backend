@@ -28,7 +28,7 @@ class StepAddTask extends PureComponent {
     return componentMap[this.getCurrentStep()];
   }
   render() {
-    const { form, stepFormData, submitting, dispatch } = this.props;
+    const { form, task, submitting, dispatch } = this.props;
     const formItemLayout = {
       labelCol: {
         span: 5,
@@ -39,7 +39,7 @@ class StepAddTask extends PureComponent {
     };
     const CurrentComponent = this.getCurrentComponent();
     return (
-      <PageHeaderLayout>
+      <PageHeaderLayout title="新建下单">
         <Card bordered={false}>
           <div>
             <Steps current={this.getCurrentStep()} className={styles.steps}>
@@ -51,7 +51,7 @@ class StepAddTask extends PureComponent {
               formItemLayout={formItemLayout}
               form={form}
               dispatch={dispatch}
-              data={stepFormData}
+              task={task}
               submitting={submitting}
             />
           </div>
@@ -62,6 +62,6 @@ class StepAddTask extends PureComponent {
 }
 
 export default connect(state => ({
-  stepFormData: state.form.step,
+  task: state.task,
   submitting: state.form.stepFormSubmitting,
 }))(StepAddTask);
