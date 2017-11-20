@@ -343,7 +343,7 @@ export default class TaskList extends PureComponent {
         fixed: 'right',
         render: (text, record) => (
           <p>
-            <Link to={"/task/list/add_task_keyword?task_id=" + record.id}>新增关键词</Link>
+            <Link to={"/task/add_task_keyword?task_id=" + record.id}>新增关键词</Link> 
             <span className={styles.splitLine} />
             <Link to={"/task_keyword/list?task_id=" + record.id}>关键词列表</Link>
             <span className={styles.splitLine} />

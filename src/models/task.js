@@ -15,6 +15,7 @@ export default {
       keywords: {},
       free_mobile_num: 0,
     },
+    success_keyword_list: [],
     loading: true,
   },
 
@@ -58,7 +59,13 @@ export default {
       if (error_code) {
         message.error(message)
         return false;
-      }      
+      }
+
+      yield put({
+        type: 'saveTaskKeywordSuccess',
+        payload: { app_id: response.app_id, keyword: response.keyword, app_name: response.app_name },
+      });
+      return { message }
     }
   },
 
@@ -77,6 +84,12 @@ export default {
           free_mobile_num: action.payload
         },
       };
+    },
+    saveTaskKeywordSuccess(state, action) {
+      return {
+        ...state,
+        success_keyword_list: state.success_keyword_list.concat(action.payload)
+      }
     },
     saveSuccess(state, action) {
       return {

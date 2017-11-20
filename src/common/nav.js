@@ -38,6 +38,7 @@ import StepAddTask from '../routes/Task/StepAddTask';
 import AddTaskStep2 from '../routes/Task/StepAddTask/Step2';
 
 import TaskKeywordList from '../routes/TaskKeyword/TaskKeywordList';
+import AddTaskKeyword from '../routes/TaskKeyword/AddTaskKeyword';
 
 
 const data = [{
@@ -70,10 +71,6 @@ const data = [{
       name: '下单列表',
       path: 'list',
       component: TaskList,
-      children: [{
-        path: 'add_task_keyword',
-        component: TaskKeywordList,
-      }],
     }, {
       name: '新建下单',
       path: 'step_add_task',
@@ -82,6 +79,9 @@ const data = [{
         path: 'step2',
         component: AddTaskStep2,
       }],
+    }, {
+      path: 'add_task_keyword',
+      component: AddTaskKeyword,
     }],
   }, {
     name: '关键词管理',

@@ -21,7 +21,7 @@ import moment from 'moment';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import StandardTable from '../../components/StandardTable';
-import styles from './TaskList.less';
+import styles from './TaskKeyword.less';
 
 import querystring from 'querystring';
 
