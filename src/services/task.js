@@ -11,8 +11,8 @@ export async function saveTask(params) {
   });
 }
 
-export async function getFreeMobileNum() {
-  return requestAuthApi('/backend/task/getFreeMobileNum');
+export async function getFreeMobileNum(params) {
+  return requestAuthApi('/backend/task/getFreeMobileNum',{query:params});
 }
 
 export async function saveTaskKeyword(params) {

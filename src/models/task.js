@@ -14,6 +14,7 @@ export default {
       task_id: 0,
       keywords: {},
       free_mobile_num: 0,
+      usable_brush_num: 10000,
     },
     success_keyword_list: [],
     loading: true,
@@ -45,12 +46,16 @@ export default {
 
       yield put(routerRedux.push('/task/step_add_task/step2'));
     },
-    *getFreeMobileNum({ }, { call, put }) {
-      const response = yield call(getFreeMobileNum);
+    *getFreeMobileNum({  }, { call, put, select }) {
+      const task_id = yield select(state => state.task.form.task_id);
+      const response = yield call(getFreeMobileNum, {task_id});
 
       yield put({
         type: 'getFreeMobileNumSuccess',
-        payload: response.free_mobile_num,
+        payload: {
+          free_mobile_num: response.free_mobile_num,// 可以打的量
+          usable_brush_num: response.usable_brush_num,// 可以打的量
+        },
       });
     },
     *saveTaskKeyword({ payload }, { call, put }) {
@@ -70,6 +75,15 @@ export default {
   },
 
   reducers: {
+    saveUsableBrushNum(state, action) {
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          usable_brush_num: action.payload
+        },
+      };
+    },
     fetchSuccess(state, action) {
       return {
         ...state,
@@ -81,7 +95,7 @@ export default {
         ...state,
         form: {
           ...state.form,
-          free_mobile_num: action.payload
+          ...action.payload
         },
       };
     },

@@ -43,7 +43,7 @@ export default class Step2 extends PureComponent {
         }
     }
     render() {
-        const { formItemLayout, form, dispatch, task: { success_keyword_list, form: { free_mobile_num, task_id } } } = this.props
+        const { formItemLayout, form, dispatch, task: { success_keyword_list, form: { free_mobile_num, task_id, usable_brush_num } } } = this.props
         const { getFieldDecorator, validateFields } = form;
 
         // 提交表单
@@ -115,7 +115,8 @@ export default class Step2 extends PureComponent {
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
-                        label="打量数"
+                        label="量级"
+                        help={"app剩余量级:" + usable_brush_num}
                     >
                         {getFieldDecorator('success_num', {
                             initialValue: '',
