@@ -67,17 +67,6 @@ export default class Step1 extends PureComponent {
           </Form.Item>
           <Form.Item
             {...formItemLayout}
-            label="app下载地址"
-          >
-            {getFieldDecorator('appuri', {
-              initialValue: '',
-              rules: [{ required: true, message: '请填写信息' }],
-            })(
-              <Input placeholder="必填" />
-              )}
-          </Form.Item>
-          <Form.Item
-            {...formItemLayout}
             label="bundle_id"
           >
             {getFieldDecorator('bundle_id', {
