@@ -116,7 +116,7 @@ export default class Step2 extends PureComponent {
                     <FormItem
                         {...formItemLayout}
                         label="量级"
-                        help={"app剩余量级:" + usable_brush_num}
+                        help={"可刷剩余量:" + usable_brush_num}
                     >
                         {getFieldDecorator('success_num', {
                             initialValue: '',
@@ -147,11 +147,11 @@ export default class Step2 extends PureComponent {
                     <FormItem
                         {...formItemLayout}
                         label="投入手机数"
-                        help={"总手机数:" + free_mobile_num}
+                        help={"空闲手机数:" + free_mobile_num}
                     >
                         {getFieldDecorator('mobile_num', {
-                            initialValue: '',
-                            rules: [{ required: true, message: '请填写信息' }],
+                            initialValue: '0',
+                            rules: [],
                         })(
                             <InputNumber placeholder="必填" min={0} onBlur={this.onBlurMobileNum} />
                             )}
@@ -176,6 +176,18 @@ export default class Step2 extends PureComponent {
                             rules: [{ required: true, message: '请填写信息' }],
                         })(
                             <InputNumber placeholder="必填" min={0} />
+                            )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="手机组id"
+                        help={"正式不填"}
+                    >
+                        {getFieldDecorator('mobile_group_id', {
+                            initialValue: '0',
+                            rules: [],
+                        })(
+                            <InputNumber placeholder="" min={0} />
                             )}
                     </FormItem>
                     <FormItem

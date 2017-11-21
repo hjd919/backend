@@ -60,7 +60,7 @@ export default class Step1 extends PureComponent {
           <Form.Item
             {...formItemLayout}
             label="appid"
-            help={"app可刷剩余量:" + usable_brush_num}
+            help={"可刷剩余量:" + usable_brush_num}
           >
             {getFieldDecorator('appid', {
               initialValue: '',

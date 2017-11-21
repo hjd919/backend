@@ -319,51 +319,81 @@ export default class TaskList extends PureComponent {
     const columns = [
       {
         fixed: 'left',
-        width: 100,
+        width: 80,
         title: 'task_id',
         dataIndex: 'task_id',
       },
       {
         fixed: 'left', 
-        width: 100,
+        width: 110,
         title: 'appid',
         dataIndex: 'appid',
       },
       {
         title: '下单人',
+        width: 80,
         dataIndex: 'user_name',
       },
       {
         title: '关键词',
+        width: 100,
         dataIndex: 'keyword',
       },
       {
         title: '量级',
+        width: 80,
         dataIndex: 'success_num',
       },
       {
         title: '上量开始',
+        width: 150,
         dataIndex: 'start_time',
       },
       {
         title: '手机数量',
+        width: 50,
         dataIndex: 'mobile_num',
       },
       {
         title: '上量前排名',
+        width: 70,
         dataIndex: 'before_rank',
       },
       {
         title: '热度',
+        width: 50,
         dataIndex: 'hot',
       },
       {
-        title: '添加时间',
+        title: '已完成',
+        width: 60,
+        dataIndex: 'is_finish',
+        render: val => val ? '是' : '否',
+      },
+      {
+        title: '实际打量结束',
+        dataIndex: 'real_end_time',
+        width: 80,
+        render: val => moment(val).format('YYYY-MM-DD HH:mm'),
+      },
+      {
+        title: '上量后排名',
+        width: 70,
+        dataIndex: 'after_rank',
+      },
+      {
+        title: '在榜时间',
+        dataIndex: 'on_rank_time',
+        render: val => val + '时',
+      },
+      {
+        title: '下单时间',
         dataIndex: 'created_at',
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+        render: val => moment(val).format('YYYY-MM-DD HH:mm'),
       },
       {
         fixed: 'right',
+        width: 100,
         title: '操作',
         render: (text, record) => (
           <p>
