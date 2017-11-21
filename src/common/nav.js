@@ -40,6 +40,7 @@ import AddTaskStep2 from '../routes/Task/StepAddTask/Step2';
 import TaskKeywordList from '../routes/TaskKeyword/TaskKeywordList';
 import AddTaskKeyword from '../routes/TaskKeyword/AddTaskKeyword';
 
+import AppList from '../routes/App/AppList';
 
 const data = [{
   component: BasicLayout,
@@ -92,6 +93,15 @@ const data = [{
       path: 'list',
       component: TaskKeywordList,
     }],
+  }, {
+      name: '任务管理',
+      path: 'app',
+      icon: 'table',
+      children: [{
+        name: '任务列表',
+        path: 'list',
+        component: AppList,
+      }],
   }, {
     name: '表单页',
     path: 'form',

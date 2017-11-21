@@ -25,3 +25,7 @@ export async function saveTaskKeyword(params) {
 export async function queryTaskKeyword(params) {
   return requestAuthApi('/backend/task_keyword/query', { query: params });
 }
+
+export async function queryApp(params) {
+  return requestAuthApi('/backend/app/query', { query: params });
+}

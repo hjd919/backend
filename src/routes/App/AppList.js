@@ -21,7 +21,7 @@ import moment from 'moment';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import StandardTable from '../../components/StandardTable';
-import styles from './TaskKeyword.less';
+import styles from './AppList.less';
 
 import querystring from 'querystring';
 
@@ -30,10 +30,10 @@ const { Option } = Select;
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
 @connect(state => ({
-  task_keyword: state.task_keyword,
+  app: state.app,
 }))
 @Form.create()
-export default class TaskList extends PureComponent {
+export default class AppList extends PureComponent {
   state = {
     addInputValue: '',
     modalVisible: false,
@@ -51,12 +51,12 @@ export default class TaskList extends PureComponent {
       query_params = querystring.parse(location.search.replace('?',''))
     }
     dispatch({
-      type: 'task_keyword/setQueryParams',
+      type: 'app/setQueryParams',
       payload: query_params,
     });
 
     dispatch({
-      type: 'task_keyword/fetch',
+      type: 'app/fetch',
       payload: query_params,
     });
   }
@@ -82,7 +82,7 @@ export default class TaskList extends PureComponent {
     }
 
     dispatch({
-      type: 'task_keyword/fetch',
+      type: 'app/fetch',
       payload: params,
     });
   }
@@ -309,9 +309,9 @@ export default class TaskList extends PureComponent {
   }
 
   render() {
-    const { task_keyword: { loading: loading, data }, form: { getFieldDecorator, getFieldValue } } = this.props;
+    const { app: { loading: loading, data }, form: { getFieldDecorator, getFieldValue } } = this.props;
     const { selectedRows, modalVisible, addInputValue } = this.state;
-
+    console.log(data)
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="remove">删除</Menu.Item>
@@ -323,35 +323,30 @@ export default class TaskList extends PureComponent {
     const columns = [
       {
         fixed: 'left',
-        width: 80,
-        title: 'task_id',
-        dataIndex: 'task_id',
-      },
-      {
-        fixed: 'left', 
-        width: 110,
+        width: 120,
         title: 'appid',
         dataIndex: 'appid',
       },
       {
-        title: '下单人',
-        width: 80,
-        dataIndex: 'user_name',
-      },
-      {
+        fixed: 'left',
         title: '关键词',
-        width: 100,
+        width: 120,
         dataIndex: 'keyword',
       },
       {
-        title: '量级',
-        width: 80,
-        dataIndex: 'success_num',
+        width: 100,
+        title: 'app名',
+        dataIndex: 'app_name',
       },
       {
-        title: '上量开始',
-        width: 150,
-        dataIndex: 'start_time',
+        title: '剩余量',
+        width: 80,
+        dataIndex: 'brush_num',
+      },
+      {
+        title: '总量',
+        width: 80,
+        dataIndex: 'success_num',
       },
       {
         title: '手机数量',
@@ -359,52 +354,38 @@ export default class TaskList extends PureComponent {
         dataIndex: 'mobile_num',
       },
       {
-        title: '上量前排名',
-        width: 70,
-        dataIndex: 'before_rank',
-      },
-      {
-        title: '热度',
-        width: 50,
-        dataIndex: 'hot',
-      },
-      {
-        title: '已完成',
-        width: 60,
-        dataIndex: 'is_finish',
-        render: val => val ? '是' : '否',
-      },
-      {
-        title: '实际打量结束',
-        dataIndex: 'real_end_time',
+        title: '打量开始',
+        dataIndex: 'start_time',
         width: 80,
         render: val => moment(val).format('YYYY-MM-DD HH:mm'),
       },
       {
-        title: '上量后排名',
-        width: 70,
-        dataIndex: 'after_rank',
-      },
-      {
-        title: '在榜时间',
-        dataIndex: 'on_rank_time',
-        render: val => val + '时',
-      },
-      {
-        title: '下单时间',
-        dataIndex: 'created_at',
+        title: '打量结束',
+        dataIndex: 'end_time',
+        width: 80,
         render: val => moment(val).format('YYYY-MM-DD HH:mm'),
       },
       {
-        fixed: 'right',
-        width: 100,
-        title: '操作',
-        render: (text, record) => (
-          <p>
-            <Link to="/task_keyword/list">修改</Link>
-          </p>
-        ),
+        title: '正在执行',
+        width: 70,
+        dataIndex: 'is_brushing',
+        render: val => val ? '是' : '否',
       },
+      {
+        title: '手机组id',
+        dataIndex: 'mobile_group_id',
+        width: 80,
+      },
+      // {
+      //   fixed: 'right',
+      //   width: 100,
+      //   title: '操作',
+      //   render: (text, record) => (
+      //     <p>
+      //       <Link to="/app/list">修改</Link>
+      //     </p>
+      //   ),
+      // },
     ];
 
     // 设置form_style
@@ -445,7 +426,7 @@ export default class TaskList extends PureComponent {
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
-              id="task_keyword"
+              id="app_list"
               data={data}
               columns={columns}
               onSelectRow={this.handleSelectRows}
@@ -453,43 +434,6 @@ export default class TaskList extends PureComponent {
             />
           </div>
         </Card>
-        <Modal
-          title="新建"
-          visible={modalVisible}
-          onOk={this.handleAdd}
-          onCancel={() => this.handleModalVisible()}
-        >
-          <Form
-            onSubmit={this.handleAdd}
-            hideRequiredMark
-            style={{ marginTop: 8 }}
-          >
-            <FormItem
-              {...formItemLayout}
-              label="app名称"
-            >
-              {getFieldDecorator('app_name', {
-                rules: [{
-                  required: true, message: '必填',
-                }],
-              })(
-                <Input placeholder="请输入app名称" />
-                )}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="appid"
-            >
-              {getFieldDecorator('appid', {
-                rules: [{
-                  required: true, message: '必填',
-                }],
-              })(
-                <Input placeholder="请输入appid" />
-                )}
-            </FormItem>
-          </Form>
-        </Modal>
       </PageHeaderLayout>
     );
   }

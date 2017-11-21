@@ -1,11 +1,11 @@
 import { queryTaskKeyword, saveTask, getFreeMobileNum } from '../services/task';
-import { removeRule, addRule } from '../services/api';
 import { routerRedux } from 'dva/router';
 
 export default {
   namespace: 'task_keyword',
 
   state: {
+    query_params: {},
     data: {
       list: [],
       pagination: {},
@@ -14,11 +14,16 @@ export default {
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
+    *fetch({ payload }, { call, put, select }) {
       yield put({
         type: 'changeLoading',
         payload: true,
       });
+
+      // 合并url的查询参数
+      const query_params = yield select(state => state.task_keyword.query_params);
+      payload = { ...payload, ...query_params}
+      
       const response = yield call(queryTaskKeyword, payload);
       yield put({
         type: 'fetchSuccess',
@@ -32,6 +37,12 @@ export default {
   },
 
   reducers: {
+    setQueryParams(state, action) {
+      return {
+        ...state,
+        query_params: action.payload,
+      };
+    },
     fetchSuccess(state, action) {
       return {
         ...state,
