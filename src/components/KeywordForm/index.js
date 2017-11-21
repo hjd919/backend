@@ -57,6 +57,10 @@ export default class Step2 extends PureComponent {
                 delete values.start_time_date
                 delete values.start_time_time
 
+                values.end_time = values.end_time_date.format('YYYY-MM-DD') + ' ' + values.end_time_time.format('HH:mm:00')
+                delete values.end_time_date
+                delete values.end_time_time
+
                 // 附带任务id:task_id
                 values.task_id = task_id
 
@@ -137,6 +141,26 @@ export default class Step2 extends PureComponent {
                                 <DatePicker />
                                 )}
                             {getFieldDecorator('start_time_time', {
+                                initialValue: moment(),
+                                rules: [{ required: true, message: '请填写信息' }],
+                            })(
+                                <TimePicker format='HH:mm' />
+                                )}
+                        </InputGroup>
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayout}
+                        label="结束时间"
+                        help={"结束时间需大于开始时间"}
+                    >
+                        <InputGroup compact>
+                            {getFieldDecorator('end_time_date', {
+                                initialValue: moment(),
+                                rules: [{ required: true, message: '请填写信息' }],
+                            })(
+                                <DatePicker />
+                                )}
+                            {getFieldDecorator('end_time_time', {
                                 initialValue: moment(),
                                 rules: [{ required: true, message: '请填写信息' }],
                             })(
