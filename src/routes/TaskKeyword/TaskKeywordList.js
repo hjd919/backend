@@ -340,6 +340,11 @@ export default class TaskList extends PureComponent {
         dataIndex: 'success_num',
       },
       {
+        title: '已完成',
+        dataIndex: 'is_finish',
+        render: val => val ? '是' : '否',
+      },
+      {
         title: '剩余打量',
         dataIndex: 'remain_brush_num',
       },
@@ -381,12 +386,6 @@ export default class TaskList extends PureComponent {
       //   width:100,
       //   dataIndex: 'hot',
       // },
-      {
-        title: '已完成',
-        dataIndex: 'is_finish',
-        render: val => val ? '是' : '否',
-      },
-
       // {
       //   title: '上量后排名',
       //   dataIndex: 'after_rank',

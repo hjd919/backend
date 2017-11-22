@@ -309,15 +309,13 @@ export default class TaskList extends PureComponent {
     const columns = [
       {
         fixed: 'left',
-        width:80,
-        title: '下单id',
-        dataIndex: 'id',
-      },
-      {
-        fixed: 'left',
         width:100,
         title: 'appid',
         dataIndex: 'appid',
+      },
+      {
+        title: '下单人',
+        dataIndex: 'user_name',
       },
       {
         title: 'app名称',
@@ -339,15 +337,15 @@ export default class TaskList extends PureComponent {
       },
       {
         title: '操作',        
-        width:270,
+        width:200,
         fixed: 'right',
         render: (text, record) => (
           <p>
             <Link to={"/task/add_task_keyword?task_id=" + record.id}>新增关键词</Link> 
             <span className={styles.splitLine} />
             <Link to={"/task_keyword/list?task_id=" + record.id}>关键词列表</Link>
-            <span className={styles.splitLine} />
-            <Link to={"/app/list?task_id=" + record.id}>任务列表</Link>
+            {/*<span className={styles.splitLine} />
+            <Link to={"/app/list?task_id=" + record.id}>任务列表</Link>*/}
           </p>
         ),
       },
