@@ -370,7 +370,7 @@ export default class TaskList extends PureComponent {
       <PageHeaderLayout title="下单列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>
+            {/*<div className={styles.tableListForm}>
               {this.renderForm()}
             </div>
             <div className={styles.tableListOperator}>
@@ -387,7 +387,7 @@ export default class TaskList extends PureComponent {
                   </span>
                 )
               }
-            </div>
+            </div>*/}
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

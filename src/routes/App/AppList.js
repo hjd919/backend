@@ -334,47 +334,39 @@ export default class AppList extends PureComponent {
         dataIndex: 'keyword',
       },
       {
-        width: 100,
         title: 'app名',
         dataIndex: 'app_name',
       },
       {
         title: '剩余量',
-        width: 80,
         dataIndex: 'brush_num',
       },
       {
         title: '总量',
-        width: 80,
         dataIndex: 'success_num',
       },
       {
         title: '手机数量',
-        width: 50,
         dataIndex: 'mobile_num',
       },
       {
         title: '打量开始',
         dataIndex: 'start_time',
-        width: 80,
         render: val => moment(val).format('YYYY-MM-DD HH:mm'),
       },
       {
         title: '打量结束',
         dataIndex: 'end_time',
-        width: 80,
         render: val => moment(val).format('YYYY-MM-DD HH:mm'),
       },
       {
         title: '正在执行',
-        width: 70,
         dataIndex: 'is_brushing',
         render: val => val ? '是' : '否',
       },
       {
         title: '手机组id',
         dataIndex: 'mobile_group_id',
-        width: 80,
       },
       // {
       //   fixed: 'right',
@@ -402,10 +394,10 @@ export default class AppList extends PureComponent {
     };
 
     return (
-      <PageHeaderLayout title="下单列表">
+      <PageHeaderLayout title="任务列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>
+            {/*<div className={styles.tableListForm}>
               {this.renderForm()}
             </div>
             <div className={styles.tableListOperator}>
@@ -422,7 +414,7 @@ export default class AppList extends PureComponent {
                   </span>
                 )
               }
-            </div>
+            </div>*/}
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

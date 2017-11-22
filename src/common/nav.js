@@ -102,7 +102,7 @@ const data = [{
         path: 'list',
         component: AppList,
       }],
-  }, {
+/* }, {
     name: '表单页',
     path: 'form',
     icon: 'form',
@@ -198,12 +198,13 @@ const data = [{
       path: '500',
       component: Exception500,
     }],
+    */
   }],
 }, {
   component: UserLayout,
   layout: 'UserLayout',
   children: [{
-    name: '帐户',
+    // name: '帐户',
     icon: 'user',
     path: 'user',
     children: [{
@@ -211,16 +212,16 @@ const data = [{
       path: 'login',
       component: Login,
     }, {
-      name: '注册',
+      // name: '注册',
       path: 'register',
       component: Register,
     }, {
-      name: '注册结果',
+      // name: '注册结果',
       path: 'register-result',
       component: RegisterResult,
     }],
   }],
-}, {
+}, /*,{
   component: BlankLayout,
   layout: 'BlankLayout',
   children: {
@@ -228,8 +229,8 @@ const data = [{
     path: 'http://pro.ant.design/docs/getting-started',
     target: '_blank',
     icon: 'book',
-  },
-}];
+    
+}}*/];
 
 export function getNavData() {
   return data;

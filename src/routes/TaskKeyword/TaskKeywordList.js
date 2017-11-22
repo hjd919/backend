@@ -322,79 +322,80 @@ export default class TaskList extends PureComponent {
     // 配置栏目
     const columns = [
       {
-        fixed: 'left',
-        width: 80,
-        title: 'task_id',
-        dataIndex: 'task_id',
-      },
-      {
         fixed: 'left', 
         width: 110,
-        title: 'appid',
-        dataIndex: 'appid',
-      },
-      {
-        title: '下单人',
-        width: 80,
-        dataIndex: 'user_name',
+        title: 'app名',
+        dataIndex: 'app_name',
       },
       {
         title: '关键词',
-        width: 100,
         dataIndex: 'keyword',
       },
       {
+        title: '下单人',
+        dataIndex: 'user_name',
+      },
+      {
         title: '量级',
-        width: 80,
         dataIndex: 'success_num',
       },
       {
-        title: '上量开始',
-        width: 150,
-        dataIndex: 'start_time',
+        title: '剩余打量',
+        dataIndex: 'remain_brush_num',
+      },
+      {
+        title: '实际总打量',
+        dataIndex: 'brushed_num',
+      },
+      {
+        title: '成功打量',
+        dataIndex: 'success_brushed_num',
+      },
+      {
+        title: '失败打量',
+        dataIndex: 'fail_brushed_num',
       },
       {
         title: '手机数量',
-        width: 50,
         dataIndex: 'mobile_num',
       },
       {
-        title: '上量前排名',
-        width: 70,
-        dataIndex: 'before_rank',
+        title: '上量开始',
+        dataIndex: 'start_time',
       },
       {
-        title: '热度',
-        width: 50,
-        dataIndex: 'hot',
+        title: '上量结束',
+        dataIndex: 'end_time',
       },
+      {
+        title: '实际结束',
+        dataIndex: 'real_end_time',
+        render: val => moment(val).format('YYYY-MM-DD HH:mm') == '2000-01-01 00:00' ? '未结束' : moment(val).format('YYYY-MM-DD HH:mm'),
+      },
+      // {
+      //   title: '上量前排名',
+      //   dataindex: 'before_rank',
+      // },
+      // {
+      //   title: '热度',
+      //   width:100,
+      //   dataIndex: 'hot',
+      // },
       {
         title: '已完成',
-        width: 60,
         dataIndex: 'is_finish',
         render: val => val ? '是' : '否',
       },
-      {
-        title: '实际打量结束',
-        dataIndex: 'real_end_time',
-        width: 80,
-        render: val => moment(val).format('YYYY-MM-DD HH:mm'),
-      },
-      {
-        title: '上量后排名',
-        width: 70,
-        dataIndex: 'after_rank',
-      },
-      {
-        title: '在榜时间',
-        dataIndex: 'on_rank_time',
-        render: val => val + '时',
-      },
-      {
-        title: '下单时间',
-        dataIndex: 'created_at',
-        render: val => moment(val).format('YYYY-MM-DD HH:mm'),
-      },
+
+      // {
+      //   title: '上量后排名',
+      //   dataIndex: 'after_rank',
+      // },
+      // {
+      //   title: '在榜时间',
+      //   dataIndex: 'on_rank_time',
+      //   render: val => val + '时',
+      // },
       {
         fixed: 'right',
         width: 100,
@@ -421,12 +422,12 @@ export default class TaskList extends PureComponent {
     };
 
     return (
-      <PageHeaderLayout title="下单列表">
+      <PageHeaderLayout title="关键词列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>
+            {/*<div className={styles.tableListForm}>
               {this.renderForm()}
-            </div>
+    </div>
             <div className={styles.tableListOperator}>
               <Link to="/task/step_add_task"><Button icon="plus" type="primary">新建</Button></Link>
               {
@@ -441,7 +442,7 @@ export default class TaskList extends PureComponent {
                   </span>
                 )
               }
-            </div>
+            </div>*/}
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

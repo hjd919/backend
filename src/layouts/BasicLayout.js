@@ -348,7 +348,8 @@ class BasicLayout extends React.PureComponent {
                   )
                 )
               }
-              <Redirect to="/dashboard/analysis" />
+              <Redirect to="/task/list" from="/"/>
+              {/* <Redirect to="/dashboard/analysis" /> */}
             </Switch>
             <GlobalFooter
               links={[{
