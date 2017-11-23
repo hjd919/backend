@@ -370,7 +370,7 @@ export default class TaskList extends PureComponent {
           <div className={styles.tableList}>
             {/*<div className={styles.tableListForm}>
               {this.renderForm()}
-            </div>
+            </div>*/}
             <div className={styles.tableListOperator}>
               <Link to="/task/step_add_task"><Button icon="plus" type="primary">新建</Button></Link>
               {
@@ -385,7 +385,7 @@ export default class TaskList extends PureComponent {
                   </span>
                 )
               }
-            </div>*/}
+            </div>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

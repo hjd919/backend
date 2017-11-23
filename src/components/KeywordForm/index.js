@@ -165,7 +165,7 @@ export default class Step2 extends PureComponent {
                                 <DatePicker />
                                 )}
                             {getFieldDecorator('end_time_time', {
-                                initialValue: moment().hour(+3),
+                                initialValue: moment().add('3', 'hours'),
                                 rules: [{ required: true, message: '请填写信息' }],
                             })(
                                 <TimePicker format='HH:mm' />
