@@ -70,7 +70,7 @@ export default {
         type: 'saveTaskKeywordSuccess',
         payload: { app_id: response.app_id, keyword: response.keyword, app_name: response.app_name },
       });
-      return { message }
+      return true
     }
   },
 

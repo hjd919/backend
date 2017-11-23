@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Form, Input, Button, Select, Divider } from 'antd';
+import { Form, Input, Button, Select, Divider, message } from 'antd';
 import { routerRedux } from 'dva/router';
 import styles from './style.less';
 import { requestAuthApi } from '../../../utils/request';
@@ -41,9 +41,10 @@ export default class Step1 extends PureComponent {
       validateFields((err, values) => {
 
         // 判断剩余量
-        if (usable_brush_num <= 0) {
-          message.success('app可刷剩余量不足,请先添加苹果账号')
-        }
+        // if (usable_brush_num <= 0) {
+        //   message.success('app可刷剩余量不足,请先添加苹果账号')
+        //   return false
+        // }
 
         if (!err) {
           dispatch({

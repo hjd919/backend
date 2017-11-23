@@ -69,7 +69,11 @@ export default class Step2 extends PureComponent {
                         type: 'task/saveTaskKeyword',
                         payload: values,
                     }).then((res) => {
-                        console.log(res)
+
+                        if (!res) {
+                            return false
+                        }
+
                         message.success('添加成功', 2, () => {
 
                             // 判断是否继续
@@ -161,7 +165,7 @@ export default class Step2 extends PureComponent {
                                 <DatePicker />
                                 )}
                             {getFieldDecorator('end_time_time', {
-                                initialValue: moment().hour(3),
+                                initialValue: moment().hour(+3),
                                 rules: [{ required: true, message: '请填写信息' }],
                             })(
                                 <TimePicker format='HH:mm' />
@@ -239,7 +243,7 @@ export default class Step2 extends PureComponent {
 
                 <Divider style={{ margin: '20px 0 10px' }} />
 
-                <Table columns={columns} dataSource={data} title={() => '已添加关键词列表'}/>
+                <Table columns={columns} dataSource={data} title={() => '已添加关键词列表'} />
             </div>
         )
     }
