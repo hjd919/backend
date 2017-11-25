@@ -29,3 +29,7 @@ export async function queryTaskKeyword(params) {
 export async function queryApp(params) {
   return requestAuthApi('/backend/app/query', { query: params });
 }
+
+export async function stopTaskKeyword(params) {
+  return requestAuthApi('/backend/task_keyword/stop', { query: params });
+}

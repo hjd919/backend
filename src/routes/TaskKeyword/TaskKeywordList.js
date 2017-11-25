@@ -196,6 +196,15 @@ export default class TaskList extends PureComponent {
     });
   }
 
+  // 停止任务
+  stopTask = (e) => {
+    const app_id = e.target.getAttribute('data-app-id')
+    this.props.dispatch({
+      type:'task_keyword/stop',
+      payload: {app_id}
+    })
+  }
+
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -322,13 +331,19 @@ export default class TaskList extends PureComponent {
     // 配置栏目
     const columns = [
       {
-        fixed: 'left', 
-        width: 110,
+        fixed: 'left',
+        width: 100,
+        title: 'appid',
+        dataIndex: 'appid',
+      },
+      {
+        width: 100,
         title: 'app名',
         dataIndex: 'app_name',
       },
       {
         title: '关键词',
+        width: 90,
         dataIndex: 'keyword',
       },
       {
@@ -340,9 +355,10 @@ export default class TaskList extends PureComponent {
         dataIndex: 'success_num',
       },
       {
-        title: '已完成',
-        dataIndex: 'is_finish',
-        render: val => val ? '是' : '否',
+        title: '实际结束',
+        width: 100,
+        dataIndex: 'real_end_time',
+        render: val => moment(val).format('YYYY-MM-DD HH:mm') == '2000-01-01 00:00' ? '进行中' : moment(val).format('YYYY-MM-DD HH:mm'),
       },
       {
         title: '剩余打量',
@@ -366,16 +382,13 @@ export default class TaskList extends PureComponent {
       },
       {
         title: '上量开始',
+        width: 100,
         dataIndex: 'start_time',
       },
       {
         title: '上量结束',
+        width: 100,
         dataIndex: 'end_time',
-      },
-      {
-        title: '实际结束',
-        dataIndex: 'real_end_time',
-        render: val => moment(val).format('YYYY-MM-DD HH:mm') == '2000-01-01 00:00' ? '未结束' : moment(val).format('YYYY-MM-DD HH:mm'),
       },
       // {
       //   title: '上量前排名',
@@ -401,7 +414,8 @@ export default class TaskList extends PureComponent {
         title: '操作',
         render: (text, record) => (
           <p>
-            <Link to="/task_keyword/list">修改</Link>
+            {/* <Link to="/task_keyword/list">停止</Link> */}
+            <Button type="danger" onClick={this.stopTask} data-app-id={record.app_id}>停止</Button>
           </p>
         ),
       },

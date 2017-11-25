@@ -1,4 +1,4 @@
-import { queryTaskKeyword, saveTask, getFreeMobileNum } from '../services/task';
+import { queryTaskKeyword, saveTask, getFreeMobileNum, stopTaskKeyword } from '../services/task';
 import { routerRedux } from 'dva/router';
 
 export default {
@@ -14,6 +14,13 @@ export default {
   },
 
   effects: {
+    *stop({ payload }, { call, put }) {
+      const response = yield call(stopTaskKeyword, payload)
+      yield put({
+        type: 'fetch',
+        payload: {},
+      });
+    },
     *fetch({ payload }, { call, put, select }) {
       yield put({
         type: 'changeLoading',
@@ -22,8 +29,8 @@ export default {
 
       // 合并url的查询参数
       const query_params = yield select(state => state.task_keyword.query_params);
-      payload = { ...payload, ...query_params}
-      
+      payload = { ...payload, ...query_params }
+
       const response = yield call(queryTaskKeyword, payload);
       yield put({
         type: 'fetchSuccess',
