@@ -363,18 +363,24 @@ export default class TaskList extends PureComponent {
       {
         title: '剩余打量',
         dataIndex: 'remain_brush_num',
+        render: (val, record) => record.is_finish ? val : '进行中',
       },
       {
         title: '实际总打量',
         dataIndex: 'brushed_num',
+        render: (val,record) => {
+          return record.is_finish ? val : '进行中'
+        }
       },
       {
         title: '成功打量',
         dataIndex: 'success_brushed_num',
+        render: val => val ? val : '进行中',
       },
       {
         title: '失败打量',
         dataIndex: 'fail_brushed_num',
+        render: val => val ? val : '进行中',
       },
       {
         title: '手机数量',
