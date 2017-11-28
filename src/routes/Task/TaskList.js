@@ -125,7 +125,8 @@ export default class TaskList extends PureComponent {
     const { dispatch, form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
-      if (err) return;
+
+      // if (err) return;
 
       const values = {
         ...fieldsValue,
@@ -188,19 +189,9 @@ export default class TaskList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="规则编号">
-              {getFieldDecorator('no')(
+            <FormItem label="appid">
+              {getFieldDecorator('appid')(
                 <Input placeholder="请输入" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
               )}
             </FormItem>
           </Col>
@@ -368,9 +359,9 @@ export default class TaskList extends PureComponent {
       <PageHeaderLayout title="下单列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
-            {/*<div className={styles.tableListForm}>
+            <div className={styles.tableListForm}>
               {this.renderForm()}
-            </div>*/}
+            </div>
             <div className={styles.tableListOperator}>
               <Link to="/task/step_add_task"><Button icon="plus" type="primary">新建</Button></Link>
               {

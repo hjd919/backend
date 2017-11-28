@@ -33,3 +33,8 @@ export async function queryApp(params) {
 export async function stopTaskKeyword(params) {
   return requestAuthApi('/backend/task_keyword/stop', { query: params });
 }
+
+// 查询每小时统计
+export async function queryHourlyStat(params){
+  return requestAuthApi('/backend/app/query_hourly_stat', { query: params });
+}

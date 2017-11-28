@@ -41,6 +41,7 @@ import TaskKeywordList from '../routes/TaskKeyword/TaskKeywordList';
 import AddTaskKeyword from '../routes/TaskKeyword/AddTaskKeyword';
 
 import AppList from '../routes/App/AppList';
+import HourlStat from '../routes/App/HourlStat';
 
 const data = [{
   component: BasicLayout,
@@ -94,111 +95,116 @@ const data = [{
       component: TaskKeywordList,
     }],
   }, {
-      name: '任务管理',
-      path: 'app',
-      icon: 'table',
-      children: [{
-        name: '任务列表',
-        path: 'list',
-        component: AppList,
-      }],
-/* }, {
-    name: '表单页',
-    path: 'form',
-    icon: 'form',
-    children: [{
-      name: '基础表单',
-      path: 'basic-form',
-      component: BasicForm,
-    }, {
-      name: '分步表单',
-      path: 'step-form',
-      component: StepForm,
-      children: [{
-        path: 'confirm',
-        component: Step2,
-      }, {
-        path: 'result',
-        component: Step3,
-      }],
-    }, {
-      name: '高级表单',
-      path: 'advanced-form',
-      component: AdvancedForm,
-    }],
-  }, {
-    name: '列表页',
-    path: 'list',
+    name: '任务管理',
+    path: 'app',
     icon: 'table',
     children: [{
-      name: '查询表格',
-      path: 'table-list',
-      component: TableList,
-    }, {
-      name: '标准列表',
-      path: 'basic-list',
-      component: BasicList,
-    }, {
-      name: '卡片列表',
-      path: 'card-list',
-      component: CardList,
-    }, {
-      name: '搜索列表（项目）',
-      path: 'cover-card-list',
-      component: CoverCardList,
-    }, {
-      name: '搜索列表（应用）',
-      path: 'filter-card-list',
-      component: FilterCardList,
-    }, {
-      name: '搜索列表（文章）',
-      path: 'search',
-      component: SearchList,
+      name: '任务列表',
+      path: 'list',
+      component: AppList,
+    },
+    {
+      name: '每小时统计',
+      path: 'hourl_stat',
+      component: HourlStat,
     }],
-  }, {
-    name: '详情页',
-    path: 'profile',
-    icon: 'profile',
-    children: [{
-      name: '基础详情页',
-      path: 'basic',
-      component: BasicProfile,
-    }, {
-      name: '高级详情页',
-      path: 'advanced',
-      component: AdvancedProfile,
-    }],
-  }, {
-    name: '结果',
-    path: 'result',
-    icon: 'check-circle-o',
-    children: [{
-      name: '成功',
-      path: 'success',
-      component: Success,
-    }, {
-      name: '失败',
-      path: 'fail',
-      component: Error,
-    }],
-  }, {
-    name: '异常',
-    path: 'exception',
-    icon: 'warning',
-    children: [{
-      name: '403',
-      path: '403',
-      component: Exception403,
-    }, {
-      name: '404',
-      path: '404',
-      component: Exception404,
-    }, {
-      name: '500',
-      path: '500',
-      component: Exception500,
-    }],
-    */
+    /* }, {
+        name: '表单页',
+        path: 'form',
+        icon: 'form',
+        children: [{
+          name: '基础表单',
+          path: 'basic-form',
+          component: BasicForm,
+        }, {
+          name: '分步表单',
+          path: 'step-form',
+          component: StepForm,
+          children: [{
+            path: 'confirm',
+            component: Step2,
+          }, {
+            path: 'result',
+            component: Step3,
+          }],
+        }, {
+          name: '高级表单',
+          path: 'advanced-form',
+          component: AdvancedForm,
+        }],
+      }, {
+        name: '列表页',
+        path: 'list',
+        icon: 'table',
+        children: [{
+          name: '查询表格',
+          path: 'table-list',
+          component: TableList,
+        }, {
+          name: '标准列表',
+          path: 'basic-list',
+          component: BasicList,
+        }, {
+          name: '卡片列表',
+          path: 'card-list',
+          component: CardList,
+        }, {
+          name: '搜索列表（项目）',
+          path: 'cover-card-list',
+          component: CoverCardList,
+        }, {
+          name: '搜索列表（应用）',
+          path: 'filter-card-list',
+          component: FilterCardList,
+        }, {
+          name: '搜索列表（文章）',
+          path: 'search',
+          component: SearchList,
+        }],
+      }, {
+        name: '详情页',
+        path: 'profile',
+        icon: 'profile',
+        children: [{
+          name: '基础详情页',
+          path: 'basic',
+          component: BasicProfile,
+        }, {
+          name: '高级详情页',
+          path: 'advanced',
+          component: AdvancedProfile,
+        }],
+      }, {
+        name: '结果',
+        path: 'result',
+        icon: 'check-circle-o',
+        children: [{
+          name: '成功',
+          path: 'success',
+          component: Success,
+        }, {
+          name: '失败',
+          path: 'fail',
+          component: Error,
+        }],
+      }, {
+        name: '异常',
+        path: 'exception',
+        icon: 'warning',
+        children: [{
+          name: '403',
+          path: '403',
+          component: Exception403,
+        }, {
+          name: '404',
+          path: '404',
+          component: Exception404,
+        }, {
+          name: '500',
+          path: '500',
+          component: Exception500,
+        }],
+        */
   }],
 }, {
   component: UserLayout,
