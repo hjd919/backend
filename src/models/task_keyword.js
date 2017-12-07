@@ -1,4 +1,4 @@
-import { queryTaskKeyword, saveTask, getFreeMobileNum, stopTaskKeyword } from '../services/task';
+import { queryTaskKeyword, saveTask, stopTaskKeyword } from '../services/task';
 import { routerRedux } from 'dva/router';
 
 export default {

@@ -55,6 +55,8 @@ export default {
         payload: {
           free_mobile_num: response.free_mobile_num,// 可以打的量
           usable_brush_num: response.usable_brush_num,// 可以打的量
+          exception_mobile_num: response.exception_mobile_num,// 可以打的量
+          usable_brush_device: response.usable_brush_device,
         },
       });
     },

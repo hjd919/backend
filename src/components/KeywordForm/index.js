@@ -43,7 +43,7 @@ export default class Step2 extends PureComponent {
         }
     }
     render() {
-        const { formItemLayout, form, dispatch, task: { success_keyword_list, form: { free_mobile_num, task_id, usable_brush_num } } } = this.props
+        const { formItemLayout, form, dispatch, task: { success_keyword_list, form: { free_mobile_num, task_id, usable_brush_num, exception_mobile_num, usable_brush_device } } } = this.props
         const { getFieldDecorator, validateFields } = form;
 
         // 提交表单
@@ -124,7 +124,7 @@ export default class Step2 extends PureComponent {
                     <FormItem
                         {...formItemLayout}
                         label="量级"
-                        help={"可刷剩余量:" + usable_brush_num}
+                        help={"可刷账号量:" + usable_brush_num + '-可刷设备量:' + usable_brush_device}
                     >
                         {getFieldDecorator('success_num', {
                             initialValue: '',
@@ -175,7 +175,7 @@ export default class Step2 extends PureComponent {
                     <FormItem
                         {...formItemLayout}
                         label="投入手机数"
-                        help={"空闲手机数:" + free_mobile_num}
+                        help={"可用手机数:" + free_mobile_num + '(异常手机数:' + exception_mobile_num + ')'}
                     >
                         {getFieldDecorator('mobile_num', {
                             initialValue: '0',
