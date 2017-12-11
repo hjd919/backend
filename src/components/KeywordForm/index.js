@@ -165,7 +165,7 @@ export default class Step2 extends PureComponent {
                                 <DatePicker />
                                 )}
                             {getFieldDecorator('end_time_time', {
-                                initialValue: moment().add('3', 'hours'),
+                                initialValue: moment().add('24', 'hours'),
                                 rules: [{ required: true, message: '请填写信息' }],
                             })(
                                 <TimePicker format='HH:mm' />
@@ -186,6 +186,18 @@ export default class Step2 extends PureComponent {
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
+                        label="手机组id"
+                        help={"正式不填"}
+                    >
+                        {getFieldDecorator('mobile_group_id', {
+                            initialValue: '0',
+                            rules: [],
+                        })(
+                            <InputNumber placeholder="" min={0} />
+                            )}
+                    </FormItem>
+                    {/*<FormItem
+                        {...formItemLayout}
                         label="打量前排名"
                     >
                         {getFieldDecorator('before_rank', {
@@ -205,19 +217,7 @@ export default class Step2 extends PureComponent {
                         })(
                             <InputNumber placeholder="必填" min={0} />
                             )}
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="手机组id"
-                        help={"正式不填"}
-                    >
-                        {getFieldDecorator('mobile_group_id', {
-                            initialValue: '0',
-                            rules: [],
-                        })(
-                            <InputNumber placeholder="" min={0} />
-                            )}
-                    </FormItem>
+                        </FormItem>
                     <FormItem
                         {...formItemLayout}
                         label="备注"
@@ -229,6 +229,7 @@ export default class Step2 extends PureComponent {
                             <TextArea style={{ minHeight: 32 }} placeholder="选填" rows={4} />
                             )}
                     </FormItem>
+                    */}
                     <FormItem
                         wrapperCol={{
                             xs: { span: 24, offset: 0 },
