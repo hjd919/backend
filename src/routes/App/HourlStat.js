@@ -18,6 +18,7 @@ const FormItem = Form.Item;
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
+import querystring from 'querystring';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import StandardTable from '../../components/StandardTable';
@@ -330,23 +331,20 @@ export default class AppList extends PureComponent {
             },
             {
                 title: '关键词',
+                width: 80,
                 dataIndex: 'keyword',
             },
             {
-                fixed: 'right',
-                width: 100,
                 title: '总量',
+                width: 80,
                 dataIndex: 'brushed_num',
             },
             {
-                fixed: 'right',
-                width: 100,
                 title: '成功量',
+                width: 80,
                 dataIndex: 'success_brushed_num',
             },
             {
-                fixed: 'right',
-                width: 100,
                 title: '失败量',
                 dataIndex: 'fail_brushed_num',
             },

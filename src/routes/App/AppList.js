@@ -328,22 +328,60 @@ export default class AppList extends PureComponent {
         dataIndex: 'appid',
       },
       {
-        fixed: 'left',
-        title: '关键词',
-        width: 120,
-        dataIndex: 'keyword',
-      },
-      {
         title: 'app名',
+        width: 100,
         dataIndex: 'app_name',
       },
       {
+        title: '关键词',
+        width: 80,
+        dataIndex: 'keyword',
+        render: (val,record) => {
+          return <Link to={"/app/hourl_stat?app_id=" + record.id}>{val}</Link>
+        },
+      },
+      {
+        title: '下单人',
+        width: 80,
+        dataIndex: 'user_name',
+      },
+      {
         title: '剩余量',
+        width: 60,
         dataIndex: 'brush_num',
       },
       {
         title: '总量',
+        width: 50,
         dataIndex: 'success_num',
+      },
+      {
+        title: '实际结束',
+        width: 100,
+        dataIndex: 'real_end_time',
+        render: val => moment(val).format('YYYY-MM-DD HH:mm') == '2000-01-01 00:00' ? '进行中' : moment(val).format('YYYY-MM-DD HH:mm'),
+      },
+      {
+        title: '剩余打量',
+        dataIndex: 'remain_brush_num',
+        render: (val, record) => record.is_finish ? val : '进行中',
+      },
+      {
+        title: '实际总打量',
+        dataIndex: 'brushed_num',
+        render: (val, record) => {
+          return record.is_finish ? val : '进行中'
+        }
+      },
+      {
+        title: '成功打量',
+        dataIndex: 'success_brushed_num',
+        render: val => val ? val : '进行中',
+      },
+      {
+        title: '失败打量',
+        dataIndex: 'fail_brushed_num',
+        render: val => val ? val : '进行中',
       },
       {
         title: '手机数量',
@@ -359,11 +397,11 @@ export default class AppList extends PureComponent {
         dataIndex: 'end_time',
         render: val => moment(val).format('YYYY-MM-DD HH:mm'),
       },
-      {
-        title: '正在执行',
-        dataIndex: 'is_brushing',
-        render: val => val ? '是' : '否',
-      },
+      // {
+      //   title: '正在执行',
+      //   dataIndex: 'is_brushing',
+      //   render: val => val ? '是' : '否',
+      // },
       {
         title: '手机组id',
         dataIndex: 'mobile_group_id',
