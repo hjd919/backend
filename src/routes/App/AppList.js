@@ -23,6 +23,9 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import StandardTable from '../../components/StandardTable';
 import styles from './AppList.less';
 
+// domain
+import { domain } from '../../config'
+
 import querystring from 'querystring';
 
 const FormItem = Form.Item;
@@ -48,7 +51,7 @@ export default class AppList extends PureComponent {
     // 从url获取查询参数
     let query_params = {};
     if (location.search) {
-      query_params = querystring.parse(location.search.replace('?',''))
+      query_params = querystring.parse(location.search.replace('?', ''))
     }
     dispatch({
       type: 'app/setQueryParams',
@@ -196,6 +199,12 @@ export default class AppList extends PureComponent {
     });
   }
 
+  exportApp = (e) => {
+    const { app: { query_params } } = this.props;
+    const export_url = domain + '/backend/app/export?token=' + localStorage.token + querystring.stringify(query_params)
+    location.href = export_url
+  }
+
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -336,7 +345,7 @@ export default class AppList extends PureComponent {
         title: '关键词',
         width: 80,
         dataIndex: 'keyword',
-        render: (val,record) => {
+        render: (val, record) => {
           return <Link to={"/app/hourl_stat?app_id=" + record.id}>{val}</Link>
         },
       },
@@ -359,18 +368,13 @@ export default class AppList extends PureComponent {
         title: '实际结束',
         width: 100,
         dataIndex: 'real_end_time',
-        render: val => moment(val).format('YYYY-MM-DD HH:mm') == '2000-01-01 00:00' ? '进行中' : moment(val).format('YYYY-MM-DD HH:mm'),
-      },
-      {
-        title: '剩余打量',
-        dataIndex: 'remain_brush_num',
-        render: (val, record) => record.is_finish ? val : '进行中',
+        render: val => !val ? '进行中' : moment(val).format('YYYY-MM-DD HH:mm'),
       },
       {
         title: '实际总打量',
         dataIndex: 'brushed_num',
         render: (val, record) => {
-          return record.is_finish ? val : '进行中'
+          return !record.is_brushing ? val : '进行中'
         }
       },
       {
@@ -435,11 +439,11 @@ export default class AppList extends PureComponent {
       <PageHeaderLayout title="任务列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
-            {/*<div className={styles.tableListForm}>
+            <div className={styles.tableListForm}>
               {this.renderForm()}
             </div>
             <div className={styles.tableListOperator}>
-              <Link to="/task/step_add_task"><Button icon="plus" type="primary">新建</Button></Link>
+              <Button icon="export" type="primary" onClick={this.exportApp}>导出</Button>
               {
                 selectedRows.length > 0 && (
                   <span>
@@ -452,7 +456,7 @@ export default class AppList extends PureComponent {
                   </span>
                 )
               }
-            </div>*/}
+            </div>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
