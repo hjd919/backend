@@ -15,17 +15,17 @@ import {
   Upload,
   message,
 } from 'antd';
-import { connect } from 'dva';
 import { Link } from 'dva/router';
+import { connect } from 'dva';
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 
+const { RangePicker } = DatePicker; // 日期
+
+import { domain } from '../../config'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import StandardTable from '../../components/StandardTable';
 import styles from './AppList.less';
-
-// domain
-import { domain } from '../../config'
 
 const uploadUrl = domain + '/backend/app/import_rank'
 
@@ -146,18 +146,20 @@ export default class AppList extends PureComponent {
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-
+      console.log(fieldsValue)
       const values = {
-        ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+        appid: fieldsValue.appid ? fieldsValue.appid.replace(' ', '') : 0,
+        start_date: fieldsValue.range_date ? fieldsValue.range_date[0].format('YYYY-MM-DD') : 0,
+        end_date: fieldsValue.range_date ? fieldsValue.range_date[1].format('YYYY-MM-DD') : 0,
       };
+      console.log(values)
 
       this.setState({
         formValues: values,
       });
 
       dispatch({
-        type: 'task/fetch',
+        type: 'app/fetch',
         payload: values,
       });
     });
@@ -178,7 +180,6 @@ export default class AppList extends PureComponent {
   handleAdd = () => {
     console.log('handleAdd')
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log(values)
       return false;
       if (!err) {
         this.props.dispatch({
@@ -203,8 +204,7 @@ export default class AppList extends PureComponent {
   }
 
   exportApp = (e) => {
-    const { app: { query_params } } = this.props;
-    const export_url = domain + '/backend/app/export?token=' + localStorage.token + querystring.stringify(query_params)
+    const export_url = domain + '/backend/app/export?token=' + localStorage.token + '&' + querystring.stringify(this.state.formValues)
     location.href = export_url
   }
 
@@ -214,7 +214,7 @@ export default class AppList extends PureComponent {
     this.props.dispatch({
       type: 'app/stop',
       payload: { app_id }
-    }).then(()=>{
+    }).then(() => {
       message.success('执行成功!');
     })
   }
@@ -224,24 +224,21 @@ export default class AppList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="规则编号">
-              {getFieldDecorator('no')(
-                <Input placeholder="请输入" />
+          <Col md={6} sm={24}>
+            <FormItem label="appid">
+              {getFieldDecorator('appid')(
+                <Input placeholder="" />
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          <Col md={12} sm={24}>
             <FormItem label="使用状态">
-              {getFieldDecorator('status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
-                </Select>
+              {getFieldDecorator('range_date')(
+                <RangePicker />
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          <Col md={6} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">查询</Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
@@ -336,7 +333,7 @@ export default class AppList extends PureComponent {
     if (file.status !== 'uploading') {
       const response = file.response
       if (response.error_code != 0) {
-        message.success('导入机刷结果成功,成功数:'+response.success_num, 5);
+        message.success('导入机刷结果成功,成功数:' + response.success_num, 5);
       } else {
         message.error('导入机刷结果失败');
       }
@@ -469,9 +466,9 @@ export default class AppList extends PureComponent {
       <PageHeaderLayout title="任务列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
-            {/* <div className={styles.tableListForm}>
+            <div className={styles.tableListForm}>
               {this.renderForm()}
-            </div> */}
+            </div>
             <div className={styles.tableListOperator}>
               <Button icon="export" type="primary" onClick={this.exportApp}>导出机刷统计</Button>
               &nbsp;
