@@ -43,7 +43,7 @@ export default class Step2 extends PureComponent {
         }
     }
     render() {
-        const { formItemLayout, form, dispatch, task: { success_keyword_list, form: { free_mobile_num, task_id, usable_brush_num, exception_mobile_num, usable_brush_device } } } = this.props
+        const { formItemLayout, form, dispatch, task: { success_keyword_list, form: { app_name, free_mobile_num, task_id, usable_brush_num, exception_mobile_num, usable_brush_device } } } = this.props
         const { getFieldDecorator, validateFields } = form;
 
         // 提交表单
@@ -89,7 +89,7 @@ export default class Step2 extends PureComponent {
         };
 
         const columns = [{
-            title: 'app_id',
+            title: '任务id',
             dataIndex: 'app_id',
             key: 'app_id',
         }, {
@@ -109,8 +109,24 @@ export default class Step2 extends PureComponent {
 
         return (
             <div>
+                <Table columns={columns} dataSource={data} title={() => '已添加关键词（app名:'+app_name+')'} />
+
+                <Divider style={{ margin: '20px 0 10px' }} />
+
                 <Form layout="horizontal" hideRequiredMark>
                     <FormItem
+                        {...formItemLayout}
+                        label="热度 排名 关键词 量级"
+                        help={"空格分割，可刷账号:" + usable_brush_num + '-可刷设备:' + usable_brush_device + "-可用手机:" + free_mobile_num + '(异常手机:' + exception_mobile_num + ')'}
+                    >
+                        {getFieldDecorator('app_info', {
+                            initialValue: '',
+                            rules: [],
+                        })(
+                            <TextArea style={{ minHeight: 40 }} placeholder="必填" rows={8} />
+                            )}
+                    </FormItem>
+                    {/* <FormItem
                         {...formItemLayout}
                         label="关键词"
                     >
@@ -124,7 +140,6 @@ export default class Step2 extends PureComponent {
                     <FormItem
                         {...formItemLayout}
                         label="量级"
-                        help={"可刷账号量:" + usable_brush_num + '-可刷设备量:' + usable_brush_device}
                     >
                         {getFieldDecorator('success_num', {
                             initialValue: '',
@@ -132,7 +147,7 @@ export default class Step2 extends PureComponent {
                         })(
                             <InputNumber placeholder="必填" min={0} />
                             )}
-                    </FormItem>
+                    </FormItem> */}
                     <FormItem
                         {...formItemLayout}
                         label="开始时间"
@@ -159,20 +174,20 @@ export default class Step2 extends PureComponent {
                     >
                         <InputGroup compact>
                             {getFieldDecorator('end_time_date', {
-                                initialValue: moment(),
+                                initialValue: moment().add('1', 'days'),
                                 rules: [{ required: true, message: '请填写信息' }],
                             })(
                                 <DatePicker />
                                 )}
                             {getFieldDecorator('end_time_time', {
-                                initialValue: moment().add('24', 'hours'),
+                                initialValue: moment(),
                                 rules: [{ required: true, message: '请填写信息' }],
                             })(
                                 <TimePicker format='HH:mm' />
                                 )}
                         </InputGroup>
                     </FormItem>
-                    <FormItem
+                    {/* <FormItem
                         {...formItemLayout}
                         label="投入手机数"
                         help={"可用手机数:" + free_mobile_num + '(异常手机数:' + exception_mobile_num + ')'}
@@ -183,11 +198,11 @@ export default class Step2 extends PureComponent {
                         })(
                             <InputNumber placeholder="必填" min={0} onBlur={this.onBlurMobileNum} />
                             )}
-                    </FormItem>
+                    </FormItem> */}
                     <FormItem
                         {...formItemLayout}
                         label="手机组id"
-                        help={"正式不填"}
+                        help={"生产不用理"}
                     >
                         {getFieldDecorator('mobile_group_id', {
                             initialValue: '0',
@@ -218,17 +233,6 @@ export default class Step2 extends PureComponent {
                             <InputNumber placeholder="必填" min={0} />
                             )}
                         </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="备注"
-                    >
-                        {getFieldDecorator('remark', {
-                            initialValue: '',
-                            rules: [],
-                        })(
-                            <TextArea style={{ minHeight: 32 }} placeholder="选填" rows={4} />
-                            )}
-                    </FormItem>
                     */}
                     <FormItem
                         wrapperCol={{
@@ -242,9 +246,6 @@ export default class Step2 extends PureComponent {
                     </FormItem>
                 </Form>
 
-                <Divider style={{ margin: '20px 0 10px' }} />
-
-                <Table columns={columns} dataSource={data} title={() => '已添加关键词列表'} />
             </div>
         )
     }

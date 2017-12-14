@@ -12,6 +12,7 @@ export default {
     },
     form: {
       task_id: 0,
+      app_name:'',
       keywords: {},
       free_mobile_num: 0,
       usable_brush_num: 10000,
@@ -53,6 +54,7 @@ export default {
       yield put({
         type: 'getFreeMobileNumSuccess',
         payload: {
+          app_name: response.app_name,// 可以打的量
           free_mobile_num: response.free_mobile_num,// 可以打的量
           usable_brush_num: response.usable_brush_num,// 可以打的量
           exception_mobile_num: response.exception_mobile_num,// 可以打的量
@@ -68,10 +70,13 @@ export default {
         return false;
       }
 
-      yield put({
-        type: 'saveTaskKeywordSuccess',
-        payload: { app_id: response.app_id, keyword: response.keyword, app_name: response.app_name },
-      });
+      for( let row of response.app_ids) {
+        yield put({
+          type: 'saveTaskKeywordSuccess',
+          payload: { app_id: row.app_id, keyword: row.keyword, app_name: response.app_name },
+        });        
+      }
+
       return true
     }
   },
