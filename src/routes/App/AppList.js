@@ -9,9 +9,10 @@ import {
   Input,
   InputNumber,
   Menu,
-  Modal,
   Row,
   Select,
+  Tag,
+  Upload,
   message,
 } from 'antd';
 import { connect } from 'dva';
@@ -25,6 +26,8 @@ import styles from './AppList.less';
 
 // domain
 import { domain } from '../../config'
+
+const uploadUrl = domain + '/backend/app/import_rank'
 
 import querystring from 'querystring';
 
@@ -328,6 +331,19 @@ export default class AppList extends PureComponent {
     return this.state.expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
 
+  // 上传文件
+  handleUploadFile = ({ file, fileList }) => {
+    if (file.status !== 'uploading') {
+      const response = file.response
+      if (response.error_code != 0) {
+        message.success('导入机刷结果成功,成功数:'+response.success_num, 5);
+      } else {
+        message.error('导入机刷结果失败');
+      }
+      return response
+    }
+  }
+
   render() {
     const { app: { loading: loading, data }, form: { getFieldDecorator, getFieldValue } } = this.props;
     const { selectedRows, modalVisible, addInputValue } = this.state;
@@ -457,7 +473,21 @@ export default class AppList extends PureComponent {
               {this.renderForm()}
             </div> */}
             <div className={styles.tableListOperator}>
-              <Button icon="export" type="primary" onClick={this.exportApp}>导出</Button>
+              <Button icon="export" type="primary" onClick={this.exportApp}>导出机刷统计</Button>
+              &nbsp;
+              &nbsp;
+              &nbsp;
+              &nbsp;
+              <Upload
+                name="upload_file"
+                headers={{ Authorization: 'Bearer ' + localStorage.token }}
+                onChange={this.handleUploadFile}
+                action={uploadUrl}>
+                <Button type="primary">
+                  <Icon type="upload" /> 导入机刷结果
+                </Button>
+              </Upload>
+              <Tag color="red">先点击“导出机刷统计”，填写好机刷结果(现排名，在榜时长，在榜开始，在榜结束)，再点击“导入机刷结果”</Tag>
               {
                 selectedRows.length > 0 && (
                   <span>
