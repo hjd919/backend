@@ -205,6 +205,17 @@ export default class AppList extends PureComponent {
     location.href = export_url
   }
 
+  // 停止任务
+  stopTask = (e) => {
+    const app_id = e.target.getAttribute('data-app-id')
+    this.props.dispatch({
+      type: 'app/stop',
+      payload: { app_id }
+    }).then(()=>{
+      message.success('执行成功!');
+    })
+  }
+
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -320,7 +331,7 @@ export default class AppList extends PureComponent {
   render() {
     const { app: { loading: loading, data }, form: { getFieldDecorator, getFieldValue } } = this.props;
     const { selectedRows, modalVisible, addInputValue } = this.state;
-    console.log(data)
+
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="remove">删除</Menu.Item>
@@ -410,16 +421,19 @@ export default class AppList extends PureComponent {
         title: '手机组id',
         dataIndex: 'mobile_group_id',
       },
-      // {
-      //   fixed: 'right',
-      //   width: 100,
-      //   title: '操作',
-      //   render: (text, record) => (
-      //     <p>
-      //       <Link to="/app/list">修改</Link>
-      //     </p>
-      //   ),
-      // },
+      {
+        fixed: 'right',
+        width: 100,
+        title: '操作',
+        render: (text, record) => (
+          <p>
+            {moment(record.end_time).isBefore(moment())
+              ? ''
+              : <Button type="danger" onClick={this.stopTask} data-app-id={record.id}>停止</Button>
+            }
+          </p>
+        ),
+      },
     ];
 
     // 设置form_style
@@ -439,9 +453,9 @@ export default class AppList extends PureComponent {
       <PageHeaderLayout title="任务列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>
+            {/* <div className={styles.tableListForm}>
               {this.renderForm()}
-            </div>
+            </div> */}
             <div className={styles.tableListOperator}>
               <Button icon="export" type="primary" onClick={this.exportApp}>导出</Button>
               {

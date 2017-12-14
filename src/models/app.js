@@ -1,4 +1,4 @@
-import { queryApp, queryHourlyStat } from '../services/task';
+import { queryApp, queryHourlyStat, stopTaskKeyword } from '../services/task';
 import { routerRedux } from 'dva/router';
 
 export default {
@@ -18,6 +18,14 @@ export default {
   },
 
   effects: {
+    *stop({ payload }, { call, put }) {
+      const response = yield call(stopTaskKeyword, payload)
+      
+      yield put({
+        type: 'fetch',
+        payload: {},
+      });
+    },
     *fetch({ payload }, { call, put, select }) {
       yield put({
         type: 'changeLoading',

@@ -61,6 +61,8 @@ export default {
           usable_brush_device: response.usable_brush_device,
         },
       });
+
+      return response.app_name
     },
     *saveTaskKeyword({ payload }, { call, put }) {
       const response = yield call(saveTaskKeyword, payload);
@@ -127,5 +129,11 @@ export default {
         loading: action.payload,
       };
     },
+    clearAddedRecord(state, action){
+      return {
+        ...state,
+        success_keyword_list: []
+      }
+    }
   },
 };

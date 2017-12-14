@@ -7,11 +7,11 @@ import {
     DatePicker,
     Divider,
     Table,
+    message,
     TimePicker
 } from 'antd';
 import { routerRedux } from 'dva/router';
 // import styles from './index.less';
-import { message } from 'antd';
 import moment from 'moment';
 
 const FormItem = Form.Item;
@@ -28,6 +28,17 @@ export default class Step2 extends PureComponent {
         // 获取手机空闲数
         this.props.dispatch({
             type: 'task/getFreeMobileNum'
+        }).then(data => {
+            message.info('正在添加任务（' + data + ')', 4);
+        })
+    }
+
+    componentWillUnmount() {
+        console.log('componentWillUnmount')
+
+        // 清空已经添加的记录
+        this.props.dispatch({
+            type: 'task/clearAddedRecord'
         })
     }
 
@@ -109,7 +120,7 @@ export default class Step2 extends PureComponent {
 
         return (
             <div>
-                <Table columns={columns} dataSource={data} title={() => '已添加关键词（app名:'+app_name+')'} />
+                <Table columns={columns} dataSource={data} title={() => '已添加关键词（app名:' + app_name + ')'} />
 
                 <Divider style={{ margin: '20px 0 10px' }} />
 
