@@ -86,6 +86,13 @@ export default {
         // 判断是否过期
         const token_expire = localStorage.token_expire
         if (token_expire) {
+          // 异常
+          if(token_expire == 'NaN'){
+            let from = location.pathname
+            dispatch(routerRedux.push('/user/login?from=' + from))
+            return true
+          }
+
           const expire_diff = token_expire - (new Date).getTime()
           if (expire_diff <= 600000 && expire_diff > 0) {
             // 刷新token
