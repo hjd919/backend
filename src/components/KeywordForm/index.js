@@ -127,7 +127,7 @@ export default class Step2 extends PureComponent {
                 <Form layout="horizontal" hideRequiredMark>
                     <FormItem
                         {...formItemLayout}
-                        label="热度 排名 关键词 量级"
+                        label="关键词 排名 热度 量级"
                         help={"空格分割，可刷账号:" + usable_brush_num + '-可刷设备:' + usable_brush_device + "-可用手机:" + free_mobile_num + '(异常手机:' + exception_mobile_num + ')'}
                     >
                         {getFieldDecorator('app_info', {

@@ -94,6 +94,11 @@ export default {
   reducers: {
     changeLoginStatus(state, { payload: { access_token, expires_in, status, type } }) {
 
+      if(access_token == 'undefined'){
+        let from = location.pathname
+        dispatch(routerRedux.push('/user/login?from=' + from))
+      }
+
       // 在localStorage添加登录凭证
       localStorage.token = access_token
       localStorage.token_expire = (new Date).getTime() + expires_in * 1000

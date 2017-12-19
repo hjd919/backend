@@ -37,6 +37,11 @@ export default {
     *refreshToken({ }, { call }) {
       const data = yield call(refreshToken);
       console.log('refreshtoken', data)
+      if(!data){
+        let from = location.pathname
+        dispatch(routerRedux.push('/user/login?from=' + from))
+      }
+
       localStorage.token = data.access_token
       localStorage.token_expire = (new Date).getTime() + data.expires_in * 1000
     },
@@ -81,7 +86,7 @@ export default {
         // 判断是否过期
         const token_expire = localStorage.token_expire
         if (token_expire) {
-          expire_diff = token_expire - (new Date).getTime()
+          const expire_diff = token_expire - (new Date).getTime()
           if (expire_diff <= 600000 && expire_diff > 0) {
             // 刷新token
             dispatch({ type: 'refreshToken' })
