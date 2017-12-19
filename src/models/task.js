@@ -1,4 +1,3 @@
-import { queryTask, saveTask, getFreeMobileNum, saveTaskKeyword, stopAllTask } from '../services/task';
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
 
@@ -83,7 +82,7 @@ export default {
     },
     *stop_task({ payload }, { call }) {
       const res = yield call(stopAllTask, payload);
-      toast.message(res.message);
+      message.success(res.message);
     },
   },
 
