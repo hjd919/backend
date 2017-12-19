@@ -35,7 +35,7 @@ export default {
         // 判断localStorage中是否存在token
         const token = localStorage.token
         if (!token) {
-          console.log('判断localStorage中是否存在token')
+          // console.log('判断localStorage中是否存在token')
           return false
         }
 

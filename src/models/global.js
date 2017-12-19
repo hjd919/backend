@@ -1,4 +1,4 @@
-import { queryNotices } from '../services/api';
+import { queryNotices, refreshToken } from '../services/api';
 import { routerRedux } from 'dva/router';
 
 export default {
@@ -33,6 +33,12 @@ export default {
         type: 'saveClearedNotices',
         payload,
       });
+    },
+    *refreshToken({ }, { call }) {
+      const data = yield call(refreshToken);
+      console.log('refreshtoken', data)
+      localStorage.token = data.access_token
+      localStorage.token_expire = (new Date).getTime() + data.expires_in * 1000
     },
   },
 
@@ -72,11 +78,18 @@ export default {
           window.ga('send', 'pageview', pathname + search);
         }
 
-        // 判断是否过期，过期则跳转登录
+        // 判断是否过期
         const token_expire = localStorage.token_expire
-        if (token_expire && token_expire - (new Date).getTime() <= 120000) {
-          let from = location.pathname
-          dispatch(routerRedux.push('/user/login?from=' + from))
+        if (token_expire) {
+          expire_diff = token_expire - (new Date).getTime()
+          if (expire_diff <= 600000 && expire_diff > 0) {
+            // 刷新token
+            dispatch({ type: 'refreshToken' })
+          } else if (expire_diff <= 0) {
+            // 过期了,跳到登录页
+            let from = location.pathname
+            dispatch(routerRedux.push('/user/login?from=' + from))
+          }
         }
       });
     },
