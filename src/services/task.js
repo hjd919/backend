@@ -38,3 +38,7 @@ export async function stopTaskKeyword(params) {
 export async function queryHourlyStat(params){
   return requestAuthApi('/backend/app/query_hourly_stat', { query: params });
 }
+
+export async function stopAllTask(params) {
+  return requestAuthApi('/backend/task/stop', { query: params });
+}

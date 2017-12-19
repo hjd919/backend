@@ -1,4 +1,4 @@
-import { queryTask, saveTask, getFreeMobileNum, saveTaskKeyword } from '../services/task';
+import { queryTask, saveTask, getFreeMobileNum, saveTaskKeyword, stopAllTask } from '../services/task';
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
 
@@ -12,7 +12,7 @@ export default {
     },
     form: {
       task_id: 0,
-      app_name:'',
+      app_name: '',
       keywords: {},
       free_mobile_num: 0,
       usable_brush_num: 10000,
@@ -47,9 +47,9 @@ export default {
 
       yield put(routerRedux.push('/task/step_add_task/step2'));
     },
-    *getFreeMobileNum({  }, { call, put, select }) {
+    *getFreeMobileNum({ }, { call, put, select }) {
       const task_id = yield select(state => state.task.form.task_id);
-      const response = yield call(getFreeMobileNum, {task_id});
+      const response = yield call(getFreeMobileNum, { task_id });
 
       yield put({
         type: 'getFreeMobileNumSuccess',
@@ -72,15 +72,19 @@ export default {
         return false;
       }
 
-      for( let row of response.app_ids) {
+      for (let row of response.app_ids) {
         yield put({
           type: 'saveTaskKeywordSuccess',
           payload: { app_id: row.app_id, keyword: row.keyword, app_name: response.app_name },
-        });        
+        });
       }
 
       return true
-    }
+    },
+    *stop_task({ payload }, { call }) {
+      const res = yield call(stopAllTask, payload);
+      toast.message(res.message);
+    },
   },
 
   reducers: {
@@ -129,7 +133,7 @@ export default {
         loading: action.payload,
       };
     },
-    clearAddedRecord(state, action){
+    clearAddedRecord(state, action) {
       return {
         ...state,
         success_keyword_list: []

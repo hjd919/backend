@@ -285,6 +285,15 @@ export default class TaskList extends PureComponent {
     return this.state.expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
 
+  stopTask = (e) =>{
+    const task_id = e.target.getAttribute('data-id')
+
+    this.props.dispatch({
+      type: 'task/stop_task',
+      payload: {task_id},
+    });
+  }
+
   render() {
     const { task: { loading: loading, data }, form: { getFieldDecorator, getFieldValue } } = this.props;
     const { selectedRows, modalVisible, addInputValue } = this.state;
@@ -328,15 +337,15 @@ export default class TaskList extends PureComponent {
       },
       {
         title: '操作',        
-        width:200,
+        width:220,
         fixed: 'right',
         render: (text, record) => (
           <p>
             <Link to={"/task/add_task_keyword?task_id=" + record.id}>新增任务</Link> 
             <span className={styles.splitLine} />
             <Link to={"/app/list?task_id=" + record.id}>任务列表</Link>
-            {/*<span className={styles.splitLine} />
-            <Link to={"/app/list?task_id=" + record.id}>任务列表</Link>*/}
+            <span className={styles.splitLine} />
+            <Link to="" onClick={this.stopTask} data-id={record.id}>停止所有</Link>
           </p>
         ),
       },
