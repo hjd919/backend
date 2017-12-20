@@ -42,3 +42,11 @@ export async function queryHourlyStat(params){
 export async function stopAllTask(params) {
   return requestAuthApi('/backend/task/stop', { query: params });
 }
+
+export async function getTodayAppleidNum() {
+  return requestAuthApi('/backend/appleid/get_today_num');
+}
+export async function getTodayEmailNum() {
+  return requestAuthApi('/backend/email/get_today_num');
+}
+

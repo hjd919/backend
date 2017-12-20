@@ -9,6 +9,7 @@ import { domain } from '../../config';
 const uploadUrl = domain + '/backend/email/import'
 
 @connect(state => ({
+  email:state.email
 }))
 export default class BasicProfile extends Component {
   constructor(props) {
@@ -16,8 +17,23 @@ export default class BasicProfile extends Component {
     this.state = {
       'message': '',
     }
+    this.inter = null
   }
 
+  componentDidMount() {
+    const { dispatch } = this.props
+
+    // 开启循环获取今天
+    this.inter = setInterval(() => {
+      dispatch({
+        type: 'email/getTodayEmailNum'
+      })
+    }, 3000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.inter)
+  }
   // 上传文件
   handleUploadEmail = ({ file, fileList }) => {
     if (file.status !== 'uploading') {
@@ -35,6 +51,8 @@ export default class BasicProfile extends Component {
   }
 
   render() {
+    const { email: { today_email_num } } = this.props
+
     return (
       <PageHeaderLayout title={"导入账号" + this.state.message}>
         <Card bordered={false}>
@@ -51,6 +69,9 @@ export default class BasicProfile extends Component {
                 </Upload>
             </Col>
           </Row>
+        </Card>
+        <Card bordered={false}>
+          <span>今日新增苹果账号数：{today_email_num}</span>
         </Card>
       </PageHeaderLayout>
     );
