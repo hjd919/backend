@@ -413,7 +413,6 @@ export default class TaskList extends PureComponent {
             >
               {getFieldDecorator('app_name', {
                 rules: [{
-                  required: true, message: '必填',
                 }],
               })(
                 <Input placeholder="请输入app名称" />

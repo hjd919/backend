@@ -34,8 +34,6 @@ export default class Step2 extends PureComponent {
     }
 
     componentWillUnmount() {
-        console.log('componentWillUnmount')
-
         // 清空已经添加的记录
         this.props.dispatch({
             type: 'task/clearAddedRecord'

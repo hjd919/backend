@@ -51,15 +51,17 @@ export default class AppList extends PureComponent {
   componentDidMount() {
     const { dispatch, location } = this.props;
 
+    // 清除查询参数
+    dispatch({
+      type: 'app/clearQueryParams',
+      payload: {},
+    });
+
     // 从url获取查询参数
     let query_params = {};
     if (location.search) {
       query_params = querystring.parse(location.search.replace('?', ''))
     }
-    dispatch({
-      type: 'app/setQueryParams',
-      payload: query_params,
-    });
 
     dispatch({
       type: 'app/fetch',
@@ -95,9 +97,16 @@ export default class AppList extends PureComponent {
 
   handleFormReset = () => {
     const { form, dispatch } = this.props;
-    form.resetFields();
+
+    form.resetFields(); 
+
     dispatch({
-      type: 'task/fetch',
+      type: 'app/clearQueryParams',
+      payload: {},
+    });
+
+    dispatch({
+      type: 'app/fetch',
       payload: {},
     });
   }
@@ -146,13 +155,12 @@ export default class AppList extends PureComponent {
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      console.log(fieldsValue)
+
       const values = {
         appid: fieldsValue.appid ? fieldsValue.appid.replace(' ', '') : 0,
         start_date: fieldsValue.range_date ? fieldsValue.range_date[0].format('YYYY-MM-DD') : 0,
         end_date: fieldsValue.range_date ? fieldsValue.range_date[1].format('YYYY-MM-DD') : 0,
       };
-      console.log(values)
 
       this.setState({
         formValues: values,
@@ -220,7 +228,7 @@ export default class AppList extends PureComponent {
   }
 
   renderSimpleForm() {
-    const { getFieldDecorator } = this.props.form;
+    const { form: { getFieldDecorator }, app: { query_params} } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -232,7 +240,7 @@ export default class AppList extends PureComponent {
             </FormItem>
           </Col>
           <Col md={12} sm={24}>
-            <FormItem label="使用状态">
+            <FormItem label="创建时间">
               {getFieldDecorator('range_date')(
                 <RangePicker />
               )}
@@ -326,6 +334,14 @@ export default class AppList extends PureComponent {
 
   renderForm() {
     return this.state.expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
+  }
+
+  // 刷新列表
+  reloadList = () => {
+    this.props.dispatch({
+      type: 'app/fetch',
+      payload: {},
+    });
   }
 
   // 上传文件
@@ -425,14 +441,14 @@ export default class AppList extends PureComponent {
         dataIndex: 'end_time',
         render: val => moment(val).format('YYYY-MM-DD HH:mm'),
       },
-      // {
-      //   title: '正在执行',
-      //   dataIndex: 'is_brushing',
-      //   render: val => val ? '是' : '否',
-      // },
       {
         title: '手机组id',
         dataIndex: 'mobile_group_id',
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'create_time',
+        render: val => moment(val).format('YYYY-MM-DD HH:mm'),
       },
       {
         fixed: 'right',
@@ -470,11 +486,16 @@ export default class AppList extends PureComponent {
               {this.renderForm()}
             </div>
             <div className={styles.tableListOperator}>
+              <Button
+                type="primary"
+                onClick={this.reloadList}
+                disabled={selectedRows.length}
+                loading={loading}
+              >
+                <Icon type="reload"/> 刷新
+              </Button>
+
               <Button icon="export" type="primary" onClick={this.exportApp}>导出机刷统计</Button>
-              &nbsp;
-              &nbsp;
-              &nbsp;
-              &nbsp;
               <Upload
                 name="upload_file"
                 headers={{ Authorization: 'Bearer ' + localStorage.token }}

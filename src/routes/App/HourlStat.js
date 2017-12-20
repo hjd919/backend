@@ -41,15 +41,17 @@ export default class AppList extends PureComponent {
     componentDidMount() {
         const { dispatch, location } = this.props;
 
+        // 清除查询参数
+        dispatch({
+            type: 'app/clearQueryParams',
+            payload: {},
+        });
+
         // 从url获取查询参数
         let query_params = {};
         if (location.search) {
             query_params = querystring.parse(location.search.replace('?', ''))
         }
-        dispatch({
-            type: 'app/setQueryParams',
-            payload: query_params,
-        });
 
         dispatch({
             type: 'app/fetchHourlyStat',
@@ -301,6 +303,14 @@ export default class AppList extends PureComponent {
         return this.state.expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
     }
 
+    // 刷新列表
+    reloadList = () => {
+        this.props.dispatch({
+            type: 'app/fetch',
+            payload: {},
+        });
+    }
+    
     render() {
         const { app: { loading: loading, hourl_stat }, form: { getFieldDecorator, getFieldValue } } = this.props;
         const { selectedRows, modalVisible, addInputValue } = this.state;
@@ -378,23 +388,31 @@ export default class AppList extends PureComponent {
                 <Card bordered={false}>
                     <div className={styles.tableList}>
                         <div className={styles.tableListForm}>
-                        {this.renderForm()}
+                            {this.renderForm()}
                         </div>
-            {/*<div className={styles.tableListOperator}>
-              <Link to="/task/step_add_task"><Button icon="plus" type="primary">新建</Button></Link>
-              {
-                selectedRows.length > 0 && (
-                  <span>
-                    <Button>批量操作</Button>
-                    <Dropdown overlay={menu}>
-                      <Button>
-                        更多操作 <Icon type="down" />
-                      </Button>
-                    </Dropdown>
-                  </span>
-                )
-              }
-            </div>*/}
+
+                        <div className={styles.tableListOperator}>
+                            <Button
+                                type="primary"
+                                onClick={this.reloadList}
+                                disabled={selectedRows.length}
+                                loading={loading}
+                            >
+                                <Icon type="reload" /> 刷新
+                            </Button>
+                            {/*
+                                selectedRows.length > 0 && (
+                                    <span>
+                                        <Button>批量操作</Button>
+                                        <Dropdown overlay={menu}>
+                                            <Button>
+                                                更多操作 <Icon type="down" />
+                                            </Button>
+                                        </Dropdown>
+                                    </span>
+                                )
+                            */}
+                        </div>
                         <StandardTable
                             selectedRows={selectedRows}
                             loading={loading}

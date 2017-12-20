@@ -20,7 +20,7 @@ export default {
   effects: {
     *stop({ payload }, { call, put }) {
       const response = yield call(stopTaskKeyword, payload)
-      
+
       yield put({
         type: 'fetch',
         payload: {},
@@ -32,9 +32,15 @@ export default {
         payload: true,
       });
 
-      // 合并url的查询参数
+      // 合并store查询参数到payload
       const query_params = yield select(state => state.app.query_params);
-      payload = { ...payload, ...query_params }
+      payload = { ...query_params, ...payload }
+
+      // 设置查询参数到store
+      yield put({
+        type: 'setQueryParams',
+        payload: payload,
+      });
 
       const response = yield call(queryApp, payload);
       yield put({
@@ -45,6 +51,9 @@ export default {
         type: 'changeLoading',
         payload: false,
       });
+
+      // 设置查询参数到storage
+
     },
     *fetchHourlyStat({ payload }, { call, put, select }) {
       yield put({
@@ -52,15 +61,23 @@ export default {
         payload: true,
       });
 
-      // 合并url的查询参数
+      // 合并store查询参数到payload
       const query_params = yield select(state => state.app.query_params);
-      payload = { ...payload, ...query_params }
+      payload = { ...query_params, ...payload }
+
+      // 设置查询参数到store
+      yield put({
+        type: 'setQueryParams',
+        payload: payload,
+      });
 
       const response = yield call(queryHourlyStat, payload);
       yield put({
         type: 'fetchHourlyStatSuccess',
         payload: response,
       });
+
+
       yield put({
         type: 'changeLoading',
         payload: false,
@@ -93,5 +110,11 @@ export default {
         loading: action.payload,
       };
     },
+    clearQueryParams(state, action) {
+      return {
+        ...state,
+        query_params: {},
+      };
+    }
   },
 };

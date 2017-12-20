@@ -16,7 +16,7 @@ export default {
       if (!access_token || !expires_in) {
         return false
       }
-      
+
       if (!response.status && response.status !== 'error') {
         response.status = 'success'
         response.type = 'account'
@@ -95,7 +95,7 @@ export default {
     changeLoginStatus(state, { payload: { access_token, expires_in, status, type } }) {
 
       if(access_token == 'undefined'){
-        let from = location.pathname
+        let from = '/'
         dispatch(routerRedux.push('/user/login?from=' + from))
       }
 
