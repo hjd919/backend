@@ -1,11 +1,11 @@
 import { message } from 'antd';
-import { queryTask, saveTask, getFreeMobileNum, stopTaskKeyword, saveTaskKeyword, stopAllTask } from '../services/task';
-import { routerRedux } from 'dva/router';
+import { queryTask, getFreeMobileNum, saveTaskKeyword, saveTask, stopAllTask } from '../services/task';
 
 export default {
   namespace: 'task',
 
   state: {
+    query_params: {},
     data: {
       list: [],
       pagination: {},
@@ -22,11 +22,22 @@ export default {
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
+    *fetch({ payload }, { call, put, select }) {
       yield put({
         type: 'changeLoading',
         payload: true,
       });
+
+      // 合并store查询参数到payload
+      const query_params = yield select(state => state.task.query_params);
+      payload = { ...query_params, ...payload }
+
+      // 设置查询参数到store
+      yield put({
+        type: 'setQueryParams',
+        payload: payload,
+      });
+
       const response = yield call(queryTask, payload);
       yield put({
         type: 'fetchSuccess',
@@ -88,6 +99,18 @@ export default {
   },
 
   reducers: {
+    setQueryParams(state, action) {
+      return {
+        ...state,
+        query_params: action.payload,
+      };
+    },
+    clearQueryParams(state, action) {
+      return {
+        ...state,
+        query_params: {},
+      };
+    },
     saveUsableBrushNum(state, action) {
       return {
         ...state,

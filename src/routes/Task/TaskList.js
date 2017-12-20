@@ -42,6 +42,13 @@ export default class TaskList extends PureComponent {
 
   componentDidMount() {
     const { dispatch } = this.props;
+
+    // 清除查询参数
+    dispatch({
+      type: 'app/clearQueryParams',
+      payload: {},
+    });
+
     dispatch({
       type: 'task/fetch',
     });
@@ -294,6 +301,14 @@ export default class TaskList extends PureComponent {
     });
   }
 
+  // 刷新列表
+  reloadList = () => {
+    this.props.dispatch({
+      type: 'task/fetch',
+      payload: {},
+    });
+  }
+
   render() {
     const { task: { loading: loading, data }, form: { getFieldDecorator, getFieldValue } } = this.props;
     const { selectedRows, modalVisible, addInputValue } = this.state;
@@ -372,6 +387,15 @@ export default class TaskList extends PureComponent {
               {this.renderForm()}
             </div>
             <div className={styles.tableListOperator}>
+              <Button
+                type="primary"
+                onClick={this.reloadList}
+                disabled={selectedRows.length}
+                loading={loading}
+              >
+                <Icon type="reload" /> 刷新
+              </Button>
+
               <Link to="/task/step_add_task"><Button icon="plus" type="primary">新建</Button></Link>
               {
                 selectedRows.length > 0 && (
