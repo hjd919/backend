@@ -1,5 +1,6 @@
 import { message } from 'antd';
 import { queryTask, getFreeMobileNum, saveTaskKeyword, saveTask, stopAllTask } from '../services/task';
+import { routerRedux } from 'dva/router';
 
 export default {
   namespace: 'task',

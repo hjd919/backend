@@ -293,6 +293,10 @@ export default class TaskList extends PureComponent {
   }
 
   stopTask = (e) =>{
+    if(!confirm('是否要停止这单的所有任务?')){
+      return true
+    }
+
     const task_id = e.target.getAttribute('data-id')
 
     this.props.dispatch({
