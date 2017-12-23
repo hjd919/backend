@@ -233,13 +233,20 @@ export default class AppList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={6} sm={24}>
+            <FormItem label="任务id">
+              {getFieldDecorator('id')(
+                <Input placeholder="" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
             <FormItem label="appid">
               {getFieldDecorator('appid')(
                 <Input placeholder="" />
               )}
             </FormItem>
           </Col>
-          <Col md={12} sm={24}>
+          <Col md={6} sm={24}>
             <FormItem label="创建时间">
               {getFieldDecorator('range_date')(
                 <RangePicker />
@@ -372,7 +379,13 @@ export default class AppList extends PureComponent {
     const columns = [
       {
         fixed: 'left',
-        width: 120,
+        width: 60,
+        title: '任务id',
+        dataIndex: 'id',
+      },
+      {
+        fixed: 'left',
+        width: 100,
         title: 'appid',
         dataIndex: 'appid',
       },

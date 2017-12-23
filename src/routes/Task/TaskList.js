@@ -328,7 +328,7 @@ export default class TaskList extends PureComponent {
     const columns = [
       {
         fixed: 'left',
-        width:100,
+        width:90,
         title: 'appid',
         dataIndex: 'appid',
       },

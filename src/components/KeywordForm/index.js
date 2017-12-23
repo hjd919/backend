@@ -192,7 +192,7 @@ export default class Step2 extends PureComponent {
                                 initialValue: moment(),
                                 rules: [{ required: true, message: '请填写信息' }],
                             })(
-                                <TimePicker format='HH:mm' />
+                                <TimePicker format='HH:00' />
                                 )}
                         </InputGroup>
                     </FormItem>
