@@ -157,6 +157,7 @@ export default class AppList extends PureComponent {
       if (err) return;
 
       const values = {
+        id: fieldsValue.id ? fieldsValue.id.replace(' ', '') : 0,
         appid: fieldsValue.appid ? fieldsValue.appid.replace(' ', '') : 0,
         start_date: fieldsValue.range_date ? fieldsValue.range_date[0].format('YYYY-MM-DD') : 0,
         end_date: fieldsValue.range_date ? fieldsValue.range_date[1].format('YYYY-MM-DD') : 0,
@@ -186,7 +187,6 @@ export default class AppList extends PureComponent {
   }
 
   handleAdd = () => {
-    console.log('handleAdd')
     this.props.form.validateFieldsAndScroll((err, values) => {
       return false;
       if (!err) {
