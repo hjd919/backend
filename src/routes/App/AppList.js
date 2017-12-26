@@ -98,7 +98,7 @@ export default class AppList extends PureComponent {
   handleFormReset = () => {
     const { form, dispatch } = this.props;
 
-    form.resetFields(); 
+    form.resetFields();
 
     dispatch({
       type: 'app/clearQueryParams',
@@ -218,6 +218,10 @@ export default class AppList extends PureComponent {
 
   // 停止任务
   stopTask = (e) => {
+    if (!confirm('是否要停止' + app_id + '的任务?')) {
+      return true
+    }
+
     const app_id = e.target.getAttribute('data-app-id')
     this.props.dispatch({
       type: 'app/stop',
@@ -228,7 +232,7 @@ export default class AppList extends PureComponent {
   }
 
   renderSimpleForm() {
-    const { form: { getFieldDecorator }, app: { query_params} } = this.props;
+    const { form: { getFieldDecorator }, app: { query_params } } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -385,13 +389,13 @@ export default class AppList extends PureComponent {
       },
       {
         fixed: 'left',
-        width: 100,
+        width: 80,
         title: 'appid',
         dataIndex: 'appid',
       },
       {
         title: 'app名',
-        width: 100,
+        width: 90,
         dataIndex: 'app_name',
       },
       {
@@ -409,11 +413,16 @@ export default class AppList extends PureComponent {
       },
       {
         title: '剩余量',
-        width: 60,
+        width: 50,
         dataIndex: 'brush_num',
       },
       {
-        title: '总量',
+        title: '已完成量',
+        width: 50,
+        dataIndex: 'hour_success_num',
+      },
+      {
+        title: '下单量',
         width: 50,
         dataIndex: 'success_num',
       },
@@ -505,7 +514,7 @@ export default class AppList extends PureComponent {
                 disabled={selectedRows.length}
                 loading={loading}
               >
-                <Icon type="reload"/> 刷新
+                <Icon type="reload" /> 刷新
               </Button>
 
               <Button icon="export" type="primary" onClick={this.exportApp}>导出机刷统计</Button>

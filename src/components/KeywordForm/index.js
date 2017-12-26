@@ -125,7 +125,7 @@ export default class Step2 extends PureComponent {
                 <Form layout="horizontal" hideRequiredMark>
                     <FormItem
                         {...formItemLayout}
-                        label="关键词 排名 热度 量级"
+                        label="关键词 排名 热度 量级 {手机组id}"
                         help={"空格分割，可刷账号:" + usable_brush_num + '-可刷设备:' + usable_brush_device + "-可用手机:" + free_mobile_num + '(异常手机:' + exception_mobile_num + ')'}
                     >
                         {getFieldDecorator('app_info', {
@@ -208,7 +208,7 @@ export default class Step2 extends PureComponent {
                             <InputNumber placeholder="必填" min={0} onBlur={this.onBlurMobileNum} />
                             )}
                     </FormItem> */}
-                    <FormItem
+                    {/* <FormItem
                         {...formItemLayout}
                         label="手机组id"
                         help={"生产不用理"}
@@ -219,7 +219,7 @@ export default class Step2 extends PureComponent {
                         })(
                             <InputNumber placeholder="" min={0} />
                             )}
-                    </FormItem>
+                    </FormItem> */}
                     {/*<FormItem
                         {...formItemLayout}
                         label="打量前排名"
