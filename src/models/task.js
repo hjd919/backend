@@ -17,6 +17,7 @@ export default {
       keywords: {},
       free_mobile_num: 0,
       usable_brush_num: 10000,
+      real_used_mobile_num:0,
     },
     success_keyword_list: [],
     loading: true,
@@ -70,6 +71,7 @@ export default {
           free_mobile_num: response.free_mobile_num,// 可以打的量
           usable_brush_num: response.usable_brush_num,// 可以打的量
           exception_mobile_num: response.exception_mobile_num,// 可以打的量
+          real_used_mobile_num: response.real_used_mobile_num,
           usable_brush_device: response.usable_brush_device,
         },
       });
