@@ -125,8 +125,8 @@ export default class Step2 extends PureComponent {
                 <Form layout="horizontal" hideRequiredMark>
                     <FormItem
                         {...formItemLayout}
-                        label="关键词 排名 热度 量级 手机数量 {手机组id}"
-                        help={"可刷账号:" + usable_brush_num + '-可刷设备:' + usable_brush_device + "-已用手机:" + real_used_mobile_num + "-可用手机:" + free_mobile_num + '(异常手机:' + exception_mobile_num + ')'}
+                        label="关键词 排名 热度 量级 {手机组id}"
+                        help={"可刷账号:" + usable_brush_num + '-每小时28成功量计算分配手机数量' + usable_brush_device + "-已用手机:" + real_used_mobile_num + "-可用手机:" + free_mobile_num + '(异常手机:' + exception_mobile_num + ')'}
                     >
                         {getFieldDecorator('app_info', {
                             initialValue: '',
