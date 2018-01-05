@@ -45,6 +45,7 @@ import HourlStat from '../routes/App/HourlStat';
 
 import EmailImport from '../routes/Email/EmailImport';
 import AppleidImport from '../routes/Email/AppleidImport';
+import StateImport from '../routes/Email/StateImport';
 
 const data = [{
   component: BasicLayout,
@@ -117,6 +118,11 @@ const data = [{
         name: '导入注册邮箱',
         path: 'import_appleid',
         component: AppleidImport,
+      },
+      {
+        name: '统计导入账号',
+        path: 'state_import',
+        component: StateImport,
       }],
     },
     /* }, {

@@ -50,3 +50,6 @@ export async function getTodayEmailNum() {
   return requestAuthApi('/backend/email/get_today_num');
 }
 
+export async function stateImport() {
+  return requestAuthApi('/backend/email/state_import');
+}
