@@ -1,4 +1,4 @@
-import { queryApp, queryHourlyStat, stopTaskKeyword } from '../services/task';
+import { queryApp, queryHourlyStat, stopTaskKeyword, fetchDailyStat } from '../services/task';
 import { routerRedux } from 'dva/router';
 
 export default {
@@ -11,6 +11,10 @@ export default {
       pagination: {},
     },
     hourl_stat: {
+      list: [],
+      pagination: {},
+    },
+    daily_stat:{
       list: [],
       pagination: {},
     },
@@ -54,6 +58,36 @@ export default {
 
       // 设置查询参数到storage
 
+    },
+    *fetchDailyStat({ payload }, { call, put, select }) {
+      yield put({
+        type: 'changeLoading',
+        payload: true,
+      });
+
+      // 合并store查询参数到payload
+      const query_params = yield select(state => state.app.query_params);
+      payload = { ...query_params, ...payload }
+
+      // 设置查询参数到store
+      yield put({
+        type: 'setQueryParams',
+        payload: payload,
+      });
+      console.log(2)
+
+      const response = yield call(fetchDailyStat, payload);
+      console.log(response)
+      yield put({
+        type: 'fetchDailyStatSuccess',
+        payload: response,
+      });
+
+
+      yield put({
+        type: 'changeLoading',
+        payload: false,
+      });
     },
     *fetchHourlyStat({ payload }, { call, put, select }) {
       yield put({
@@ -102,6 +136,12 @@ export default {
       return {
         ...state,
         hourl_stat: action.payload,
+      };
+    },
+    fetchDailyStatSuccess(state, action) {
+      return {
+        ...state,
+        daily_stat: action.payload,
       };
     },
     changeLoading(state, action) {

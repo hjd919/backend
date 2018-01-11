@@ -42,6 +42,7 @@ import AddTaskKeyword from '../routes/TaskKeyword/AddTaskKeyword';
 
 import AppList from '../routes/App/AppList';
 import HourlStat from '../routes/App/HourlStat';
+import DailyStat from '../routes/App/DailyStat';
 
 import EmailImport from '../routes/Email/EmailImport';
 import AppleidImport from '../routes/Email/AppleidImport';
@@ -103,28 +104,33 @@ const data = [{
       name: '每小时统计',
       path: 'hourl_stat',
       component: HourlStat,
-        
+
+    }, {
+      name: '每天统计',
+      path: 'daily_stat',
+      component: DailyStat,
+
     }],
   }, {
-      name: '苹果账号管理',
-      path: 'email',
-      icon: 'form',
-      children: [{
-        name: '导入苹果账号',
-        path: 'import_email',
-        component: EmailImport,
-      },
-      {
-        name: '导入注册邮箱',
-        path: 'import_appleid',
-        component: AppleidImport,
-      },
-      {
-        name: '统计导入账号',
-        path: 'state_import',
-        component: StateImport,
-      }],
+    name: '苹果账号管理',
+    path: 'email',
+    icon: 'form',
+    children: [{
+      name: '导入苹果账号',
+      path: 'import_email',
+      component: EmailImport,
     },
+    {
+      name: '导入注册邮箱',
+      path: 'import_appleid',
+      component: AppleidImport,
+    },
+    {
+      name: '统计导入账号',
+      path: 'state_import',
+      component: StateImport,
+    }],
+  },
     /* }, {
         name: '表单页',
         path: 'form',

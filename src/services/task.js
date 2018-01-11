@@ -53,3 +53,7 @@ export async function getTodayEmailNum() {
 export async function stateImport() {
   return requestAuthApi('/backend/email/state_import');
 }
+
+export async function fetchDailyStat(params) {
+  return requestAuthApi('/backend/app/query_daily_stat', { query: params });
+}
