@@ -323,9 +323,8 @@ export default class AppList extends PureComponent {
       {
         title: '日期',
         width:150,
-        key:'create_day',
-        dataIndex: 'create_day',
-        render: val => moment(val).format('YYYY-MM-DD'),
+        key:'import_date',
+        dataIndex: 'import_date',
       },
       {
         title: '导入账号数',
