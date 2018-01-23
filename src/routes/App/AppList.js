@@ -155,21 +155,23 @@ export default class AppList extends PureComponent {
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
+      console.log('fieldsValue', fieldsValue)
+      let values = {}
+      if (fieldsValue.range_date){
+        values['start_date'] = fieldsValue.range_date[0].format('YYYY-MM-DD')
+        values['end_date'] = fieldsValue.range_date[1].format('YYYY-MM-DD')
+      }
+      delete fieldsValue.range_date
 
-      const values = {
-        id: fieldsValue.id ? fieldsValue.id.replace(' ', '') : 0,
-        appid: fieldsValue.appid ? fieldsValue.appid.replace(' ', '') : 0,
-        start_date: fieldsValue.range_date ? fieldsValue.range_date[0].format('YYYY-MM-DD') : 0,
-        end_date: fieldsValue.range_date ? fieldsValue.range_date[1].format('YYYY-MM-DD') : 0,
-      };
-
+      fieldsValue = Object.assign({}, fieldsValue, values)
+      console.log('fieldsValue', fieldsValue)
       this.setState({
-        formValues: values,
+        formValues: fieldsValue,
       });
 
       dispatch({
         type: 'app/fetch',
-        payload: values,
+        payload: fieldsValue,
       });
     });
   }
@@ -236,21 +238,21 @@ export default class AppList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={6} sm={24}>
+          <Col md={5} sm={24}>
             <FormItem label="任务id">
               {getFieldDecorator('id')(
                 <Input placeholder="" />
               )}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="appid">
-              {getFieldDecorator('appid')(
+          <Col md={5} sm={24}>
+            <FormItem label="关键词">
+              {getFieldDecorator('keyword')(
                 <Input placeholder="" />
               )}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="创建时间">
               {getFieldDecorator('range_date')(
                 <RangePicker />
