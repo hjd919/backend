@@ -146,7 +146,6 @@ class StandardTable extends PureComponent {
         <Table
           loading={loading}
           rowKey={record => record.key}
-          rowSelection={rowSelection}
           dataSource={list}
           columns={columns}
           pagination={paginationProps}

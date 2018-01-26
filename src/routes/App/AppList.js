@@ -220,7 +220,7 @@ export default class AppList extends PureComponent {
 
   // 停止任务
   stopTask = (e) => {
-    if (!confirm('是否要停止' + app_id + '的任务?')) {
+    if (!confirm('是否要停止该任务?')) {
       return true
     }
 
@@ -392,15 +392,12 @@ export default class AppList extends PureComponent {
     const columns = [
       {
         fixed: 'left',
-        width: 60,
-        title: '任务id',
-        dataIndex: 'id',
-      },
-      {
-        fixed: 'left',
+        title: '关键词',
         width: 80,
-        title: 'appid',
-        dataIndex: 'appid',
+        dataIndex: 'keyword',
+        render: (val, record) => {
+          return <Link to={"/app/hourl_stat?app_id=" + record.id}>{val}</Link>
+        },
       },
       {
         title: 'app名',
@@ -408,12 +405,14 @@ export default class AppList extends PureComponent {
         dataIndex: 'app_name',
       },
       {
-        title: '关键词',
         width: 80,
-        dataIndex: 'keyword',
-        render: (val, record) => {
-          return <Link to={"/app/hourl_stat?app_id=" + record.id}>{val}</Link>
-        },
+        title: 'appid',
+        dataIndex: 'appid',
+      },
+      {
+        width: 60,
+        title: '任务id',
+        dataIndex: 'id',
       },
       {
         title: '下单人',
@@ -483,7 +482,7 @@ export default class AppList extends PureComponent {
       },
       {
         fixed: 'right',
-        width: 200,
+        width: 60,
         title: '操作',
         render: (text, record) => (
           <div style={{ display:'flex'}}>
@@ -532,9 +531,8 @@ export default class AppList extends PureComponent {
               >
                 <Icon type="reload" /> 刷新
               </Button>
-
               <Button icon="export" type="primary" onClick={this.exportApp}>导出机刷统计</Button>
-              <Upload
+              {/*<Upload
                 name="upload_file"
                 headers={{ Authorization: 'Bearer ' + localStorage.token }}
                 onChange={this.handleUploadFile}
@@ -543,7 +541,7 @@ export default class AppList extends PureComponent {
                   <Icon type="upload" /> 导入机刷结果
                 </Button>
               </Upload>
-              <Tag color="red">先点击“导出机刷统计”，填写好机刷结果(现排名，在榜时长，在榜开始，在榜结束)，再点击“导入机刷结果”</Tag>
+   <Tag color="red">先点击“导出机刷统计”，填写好机刷结果(现排名，在榜时长，在榜开始，在榜结束)，再点击“导入机刷结果”</Tag>*/}
               {
                 selectedRows.length > 0 && (
                   <span>

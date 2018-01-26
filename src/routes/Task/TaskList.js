@@ -295,8 +295,8 @@ export default class TaskList extends PureComponent {
     return this.state.expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
 
-  stopTask = (e) =>{
-    if(!confirm('是否要停止这单的所有任务?')){
+  stopTask = (e) => {
+    if (!confirm('是否要停止这单的所有任务?')) {
       return true
     }
 
@@ -304,7 +304,7 @@ export default class TaskList extends PureComponent {
 
     this.props.dispatch({
       type: 'task/stop_task',
-      payload: {task_id},
+      payload: { task_id },
     });
   }
 
@@ -321,7 +321,7 @@ export default class TaskList extends PureComponent {
     if (file.status !== 'uploading') {
       const response = file.response
       if (response.error_code != 0) {
-        message.success('导入评论成功');
+        message.success('导入评论成功' + response.content, 6000);
         this.setState({
           message: '结果：' + response.content
         })
@@ -346,40 +346,11 @@ export default class TaskList extends PureComponent {
     // 配置栏目
     const columns = [
       {
-        fixed: 'left',
-        width:90,
-        title: 'appid',
-        dataIndex: 'appid',
-      },
-      {
-        title: '下单人',
-        dataIndex: 'user_name',
-      },
-      {
-        title: 'app名称',
-        dataIndex: 'app_name',
-      },
-      {
-        title: '下单总量',
-        dataIndex: 'total_num',
-      },
-      {
-        title: '创建时间',
-        dataIndex: 'created_at',
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
-        title: '修改时间',
-        dataIndex: 'updated_at',
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
-        title: '操作',        
-        width:220,
-        fixed: 'right',
+        title: '操作',
+        width: 220,
         render: (text, record) => (
           <p>
-            <Link to={"/task/add_task_keyword?task_id=" + record.id}>新增任务</Link> 
+            <Link to={"/task/add_task_keyword?task_id=" + record.id}>新增任务</Link>
             <span className={styles.splitLine} />
             <Link to={"/app/list?task_id=" + record.id}>任务列表</Link>
             <span className={styles.splitLine} />
@@ -390,12 +361,36 @@ export default class TaskList extends PureComponent {
               headers={{ Authorization: 'Bearer ' + localStorage.token }}
               onChange={this.handleUploadEmail}
               action={uploadUrl + '?appid=' + record.appid}>
-              <Button>
-                <Icon type="upload" /> 导入评论
-                  </Button>
+              <a>导入评论</a>
             </Upload>
           </p>
         ),
+      },
+      {
+        title: 'app名称',
+        width: 100,
+        dataIndex: 'app_name',
+      },
+      {
+        title: '创建时间',
+        width: 100,
+        dataIndex: 'created_at',
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      },
+      {
+        width: 100,
+        title: 'appid',
+        dataIndex: 'appid',
+      },
+      {
+        title: '下单人',
+        width: 100,
+        dataIndex: 'user_name',
+      },
+
+      {
+        title: '下单总量',
+        dataIndex: 'total_num',
       },
     ];
 
@@ -446,7 +441,7 @@ export default class TaskList extends PureComponent {
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
-              data={data} 
+              data={data}
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
