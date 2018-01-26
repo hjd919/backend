@@ -8,6 +8,7 @@ import {
     Divider,
     Table,
     message,
+    Checkbox,
     TimePicker
 } from 'antd';
 import { routerRedux } from 'dva/router';
@@ -52,7 +53,7 @@ export default class Step2 extends PureComponent {
         }
     }
     render() {
-        const { formItemLayout, form, dispatch, task: { success_keyword_list, form: { app_name, free_mobile_num, task_id, usable_brush_num, exception_mobile_num, usable_brush_device, real_used_mobile_num } } } = this.props
+        const { formItemLayout, form, dispatch, task: { success_keyword_list, form: { app_name, free_mobile_num, task_id, usable_brush_num, exception_mobile_num, usable_brush_device, real_used_mobile_num, useful_comment_num } } } = this.props
         const { getFieldDecorator, validateFields } = form;
 
         // 提交表单
@@ -126,7 +127,7 @@ export default class Step2 extends PureComponent {
                     <FormItem
                         {...formItemLayout}
                         label="关键词 排名 热度 量级 {手机组id}"
-                        help={"可刷账号:" + usable_brush_num + '-每小时28成功量计算分配手机数量' + usable_brush_device + "-已用手机:" + real_used_mobile_num + "-可用手机:" + free_mobile_num + '(异常手机:' + exception_mobile_num + ')'}
+                        help={"可刷账号:" + usable_brush_num + '-每小时28量分配手机数量' + usable_brush_device + "-已用手机:" + real_used_mobile_num + "-可用手机:" + free_mobile_num + '(异常手机:' + exception_mobile_num + ')'}
                     >
                         {getFieldDecorator('app_info', {
                             initialValue: '',
@@ -196,18 +197,18 @@ export default class Step2 extends PureComponent {
                                 )}
                         </InputGroup>
                     </FormItem>
-                    {/* <FormItem
+                    <FormItem
                         {...formItemLayout}
-                        label="投入手机数"
-                        help={"可用手机数:" + free_mobile_num + '(异常手机数:' + exception_mobile_num + ')'}
+                        label="开启评论"
+                        help={"剩余评论数:" + useful_comment_num}
                     >
-                        {getFieldDecorator('mobile_num', {
-                            initialValue: '0',
+                        {getFieldDecorator('is_comment', {
+                            initialValue: false,
                             rules: [],
                         })(
-                            <InputNumber placeholder="必填" min={0} onBlur={this.onBlurMobileNum} />
+                            <Checkbox>是</Checkbox>
                             )}
-                    </FormItem> */}
+                    </FormItem> 
                     {/* <FormItem
                         {...formItemLayout}
                         label="手机组id"
