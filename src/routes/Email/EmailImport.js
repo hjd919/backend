@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Import.less';
 import { domain } from '../../config';
-
 const uploadUrl = domain + '/backend/email/import'
 
 @connect(state => ({

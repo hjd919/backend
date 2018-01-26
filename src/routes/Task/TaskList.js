@@ -12,6 +12,7 @@ import {
   Modal,
   Row,
   Select,
+  Upload,
   message,
 } from 'antd';
 import { connect } from 'dva';
@@ -22,6 +23,8 @@ import moment from 'moment';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import StandardTable from '../../components/StandardTable';
 import styles from './TaskList.less';
+import { domain } from '../../config';
+const uploadUrl = domain + '/backend/comment/import'
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -313,6 +316,22 @@ export default class TaskList extends PureComponent {
     });
   }
 
+  // 上传文件
+  handleUploadEmail = ({ file, fileList }) => {
+    if (file.status !== 'uploading') {
+      const response = file.response
+      if (response.error_code != 0) {
+        message.success('导入评论成功');
+        this.setState({
+          message: '结果：' + response.content
+        })
+      } else {
+        message.error('导入评论失败');
+      }
+      return response
+    }
+  }
+
   render() {
     const { task: { loading: loading, data }, form: { getFieldDecorator, getFieldValue } } = this.props;
     const { selectedRows, modalVisible, addInputValue } = this.state;
@@ -365,6 +384,16 @@ export default class TaskList extends PureComponent {
             <Link to={"/app/list?task_id=" + record.id}>任务列表</Link>
             <span className={styles.splitLine} />
             <Link to="" onClick={this.stopTask} data-id={record.id}>停止所有</Link>
+            <span className={styles.splitLine} />
+            <Upload
+              name="upload_email"
+              headers={{ Authorization: 'Bearer ' + localStorage.token }}
+              onChange={this.handleUploadEmail}
+              action={uploadUrl + '?appid=' + record.appid}>
+              <Button>
+                <Icon type="upload" /> 导入评论
+                  </Button>
+            </Upload>
           </p>
         ),
       },

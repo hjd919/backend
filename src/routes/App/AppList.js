@@ -357,6 +357,13 @@ export default class AppList extends PureComponent {
     });
   }
 
+  openComment = () => {
+    this.props.dispatch({
+      type: 'app/openComment',
+      payload: {},
+    });
+  }
+
   // 上传文件
   handleUploadFile = ({ file, fileList }) => {
     if (file.status !== 'uploading') {
@@ -476,15 +483,22 @@ export default class AppList extends PureComponent {
       },
       {
         fixed: 'right',
-        width: 100,
+        width: 200,
         title: '操作',
         render: (text, record) => (
+          <div style={{ display:'flex'}}>
           <p>
             {moment(record.end_time).isBefore(moment())
               ? ''
               : <Button type="danger" onClick={this.stopTask} data-app-id={record.id}>停止</Button>
             }
           </p>
+          {/*
+          <p>
+              <Button type="default" onClick={this.openComment} data-app-id={record.id}>开启评论</Button>
+            </p>
+            */}
+            </div>
         ),
       },
     ];
