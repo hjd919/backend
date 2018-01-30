@@ -393,7 +393,7 @@ export default class AppList extends PureComponent {
       {
         fixed: 'left',
         title: '关键词',
-        width: 80,
+        width: 90,
         dataIndex: 'keyword',
         render: (val, record) => {
           return <Link to={"/app/hourl_stat?app_id=" + record.id}>{val}</Link>
@@ -405,7 +405,7 @@ export default class AppList extends PureComponent {
         dataIndex: 'app_name',
       },
       {
-        width: 80,
+        width: 100,
         title: 'appid',
         dataIndex: 'appid',
       },

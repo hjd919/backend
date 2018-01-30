@@ -36,6 +36,7 @@ import RegisterResult from '../routes/User/RegisterResult';
 import TaskList from '../routes/Task/TaskList';
 import StepAddTask from '../routes/Task/StepAddTask';
 import AddTaskStep2 from '../routes/Task/StepAddTask/Step2';
+import AddSpareTask from '../routes/Task/AddSpareTask';
 
 // import TaskKeywordList from '../routes/TaskKeyword/TaskKeywordList';
 import AddTaskKeyword from '../routes/TaskKeyword/AddTaskKeyword';
@@ -89,6 +90,10 @@ const data = [{
     }, {
       path: 'add_task_keyword',
       component: AddTaskKeyword,
+    }, {
+      name: '新建空闲任务',
+      path: 'add_spare_task',
+        component: AddSpareTask,
     }],
 
   }, {

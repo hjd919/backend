@@ -347,7 +347,7 @@ export default class TaskList extends PureComponent {
     const columns = [
       {
         title: '操作',
-        width: 220,
+        width: 250,
         render: (text, record) => (
           <p>
             <Link to={"/task/add_task_keyword?task_id=" + record.id}>新增任务</Link>
@@ -368,14 +368,13 @@ export default class TaskList extends PureComponent {
       },
       {
         title: 'app名称',
-        width: 100,
+        width: 150,
         dataIndex: 'app_name',
       },
       {
-        title: '创建时间',
-        width: 100,
-        dataIndex: 'created_at',
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+        title: '下单总量',
+        width: 80,
+        dataIndex: 'total_num',
       },
       {
         width: 100,
@@ -387,10 +386,10 @@ export default class TaskList extends PureComponent {
         width: 100,
         dataIndex: 'user_name',
       },
-
       {
-        title: '下单总量',
-        dataIndex: 'total_num',
+        title: '创建时间',
+        dataIndex: 'created_at',
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
     ];
 

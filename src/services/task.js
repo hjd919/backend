@@ -57,3 +57,10 @@ export async function stateImport() {
 export async function fetchDailyStat(params) {
   return requestAuthApi('/backend/app/query_daily_stat', { query: params });
 }
+
+export async function addSpareTask(params) {
+  return requestAuthApi('/backend/task/addSpareTask', {
+    method: 'POST',
+    body: params,
+  });
+}

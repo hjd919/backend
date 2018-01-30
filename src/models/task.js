@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { queryTask, getFreeMobileNum, saveTaskKeyword, saveTask, stopAllTask } from '../services/task';
+import { addSpareTask, queryTask, getFreeMobileNum, saveTaskKeyword, saveTask, stopAllTask } from '../services/task';
 import { routerRedux } from 'dva/router';
 
 export default {
@@ -101,6 +101,15 @@ export default {
       const res = yield call(stopAllTask, payload);
       message.success(res.message);
     },
+    *addSpareTask({ payload }, { call, put }) {
+      const response = yield call(addSpareTask, payload);
+      const { error_code, message } = response
+      if (error_code) {
+        message.error(message)
+        return false;
+      }
+      return true
+    }
   },
 
   reducers: {
