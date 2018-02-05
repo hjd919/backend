@@ -64,3 +64,10 @@ export async function addSpareTask(params) {
     body: params,
   });
 }
+
+export async function saveBrushIdfa(params) {
+  return requestAuthApi('/backend/brush_idfa/save', {
+    method: 'POST',
+    body: params,
+  });
+}

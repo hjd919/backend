@@ -26,6 +26,8 @@ export default class BasicForms extends PureComponent {
         this.props.dispatch({
           type: 'task/addSpareTask',
           payload: values,
+        }).then(() => {
+          location.href = '#/task/list'
         });
       }
     });
@@ -142,7 +144,7 @@ export default class BasicForms extends PureComponent {
                   <Radio value="2">联运</Radio>
                   <Radio value="3">商业</Radio>
                 </Radio.Group>
-              )}
+                )}
             </FormItem>
             <FormItem
               {...formItemLayout}

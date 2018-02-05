@@ -49,6 +49,8 @@ import EmailImport from '../routes/Email/EmailImport';
 import AppleidImport from '../routes/Email/AppleidImport';
 import StateImport from '../routes/Email/StateImport';
 
+import BrushIdfaAdd from '../routes/BrushIdfa/Add';
+
 const data = [{
   component: BasicLayout,
   layout: 'BasicLayout',
@@ -135,6 +137,17 @@ const data = [{
       path: 'state_import',
       component: StateImport,
     }],
+  },
+  {
+    name: '刷idfa管理',
+    path: 'brush_idfa',
+    icon: 'form',
+    children: [{
+      name: '新建下单',
+      path: 'add',
+      component: BrushIdfaAdd,
+    },
+  ]
   },
     /* }, {
         name: '表单页',

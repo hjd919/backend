@@ -1,9 +1,9 @@
 import { message } from 'antd';
-import { addSpareTask, queryTask, getFreeMobileNum, saveTaskKeyword, saveTask, stopAllTask } from '../services/task';
+import { saveBrushIdfa, queryTask } from '../services/task';
 import { routerRedux } from 'dva/router';
 
 export default {
-  namespace: 'task',
+  namespace: 'brush_idfa',
 
   state: {
     query_params: {},
@@ -15,10 +15,6 @@ export default {
       task_id: 0,
       app_name: '',
       keywords: {},
-      free_mobile_num: 0,
-      usable_brush_num: 10000,
-      real_used_mobile_num:0,
-      useful_comment_num:0,
     },
     success_keyword_list: [],
     loading: true,
@@ -52,14 +48,8 @@ export default {
       });
     },
     *save({ payload }, { call, put }) {
-      const response = yield call(saveTask, payload);
-
-      yield put({
-        type: 'saveSuccess',
-        payload: response.task_id,
-      });
-
-      yield put(routerRedux.push('/task/step_add_task/step2'));
+      const response = yield call(saveBrushIdfa, payload);
+      message.success('添加成功')
     },
     *getFreeMobileNum({ }, { call, put, select }) {
       const task_id = yield select(state => state.task.form.task_id);
@@ -108,8 +98,6 @@ export default {
         message.error(message)
         return false;
       }
-      message.success(message)
-      yield put(routerRedux.push('/task/list'));
       return true
     }
   },
