@@ -9,38 +9,32 @@ import {
   Input,
   InputNumber,
   Menu,
+  Modal,
   Row,
   Select,
-  Tag,
   Upload,
-  Radio,
   message,
 } from 'antd';
-import { Link } from 'dva/router';
 import { connect } from 'dva';
+import { Link } from 'dva/router';
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 
-const { RangePicker } = DatePicker; // 日期
-
-import { domain } from '../../config'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import StandardTable from '../../components/StandardTable';
-import styles from './AppList.less';
-
-const uploadUrl = domain + '/backend/app/import_rank'
-
-import querystring from 'querystring';
+import styles from './TaskList.less';
+import { domain } from '../../config';
+const uploadUrl = domain + '/backend/comment/import'
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
 @connect(state => ({
-  app: state.app,
+  task: state.task,
 }))
 @Form.create()
-export default class AppList extends PureComponent {
+export default class TaskList extends PureComponent {
   state = {
     addInputValue: '',
     modalVisible: false,
@@ -50,23 +44,16 @@ export default class AppList extends PureComponent {
   };
 
   componentDidMount() {
-    const { dispatch, location } = this.props;
+    const { dispatch } = this.props;
 
     // 清除查询参数
     dispatch({
-      type: 'app/clearQueryParams',
+      type: 'task/clearQueryParams',
       payload: {},
     });
 
-    // 从url获取查询参数
-    let query_params = {};
-    if (location.search) {
-      query_params = querystring.parse(location.search.replace('?', ''))
-    }
-
     dispatch({
-      type: 'app/fetch',
-      payload: query_params,
+      type: 'task/fetch_spare_tasks',
     });
   }
 
@@ -91,23 +78,16 @@ export default class AppList extends PureComponent {
     }
 
     dispatch({
-      type: 'app/fetch',
+      type: 'task/fetch_spare_tasks',
       payload: params,
     });
   }
 
   handleFormReset = () => {
     const { form, dispatch } = this.props;
-
     form.resetFields();
-
     dispatch({
-      type: 'app/clearQueryParams',
-      payload: {},
-    });
-
-    dispatch({
-      type: 'app/fetch',
+      type: 'task/fetch_spare_tasks',
       payload: {},
     });
   }
@@ -155,24 +135,21 @@ export default class AppList extends PureComponent {
     const { dispatch, form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
-      if (err) return;
 
-      let values = {}
-      if (fieldsValue.range_date){
-        values['start_date'] = fieldsValue.range_date[0].format('YYYY-MM-DD')
-        values['end_date'] = fieldsValue.range_date[1].format('YYYY-MM-DD')
-      }
-      delete fieldsValue.range_date
+      // if (err) return;
 
-      fieldsValue = Object.assign({}, fieldsValue, values)
-      
+      const values = {
+        ...fieldsValue,
+        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+      };
+
       this.setState({
-        formValues: fieldsValue,
+        formValues: values,
       });
 
       dispatch({
-        type: 'app/fetch',
-        payload: fieldsValue,
+        type: 'task/fetch_spare_tasks',
+        payload: values,
       });
     });
   }
@@ -190,7 +167,9 @@ export default class AppList extends PureComponent {
   }
 
   handleAdd = () => {
+    console.log('handleAdd')
     this.props.form.validateFieldsAndScroll((err, values) => {
+      console.log(values)
       return false;
       if (!err) {
         this.props.dispatch({
@@ -214,56 +193,26 @@ export default class AppList extends PureComponent {
     });
   }
 
-  exportApp = (e) => {
-    const export_url = domain + '/backend/app/export?token=' + localStorage.token + '&' + querystring.stringify(this.state.formValues)
-    location.href = export_url
-  }
-
-  // 停止任务
-  stopTask = (e) => {
-    if (!confirm('是否要停止该任务?')) {
-      return true
-    }
-
-    const app_id = e.target.getAttribute('data-app-id')
-    this.props.dispatch({
-      type: 'app/stop',
-      payload: { app_id }
-    }).then(() => {
-      message.success('执行成功!');
-    })
-  }
-
   renderSimpleForm() {
-    const { form: { getFieldDecorator }, app: { query_params } } = this.props;
+    const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={6} sm={24}>
-            <FormItem label="评论">
-              {getFieldDecorator('is_comment')(
-                <Radio.Group>
-                  <Radio value="0">不是</Radio>
-                  <Radio value="1">是</Radio>
-                </Radio.Group>
+          <Col md={8} sm={24}>
+            <FormItem label="appid">
+              {getFieldDecorator('appid')(
+                <Input placeholder="请输入" />
               )}
             </FormItem>
           </Col>
-          <Col md={5} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="关键词">
               {getFieldDecorator('keyword')(
                 <Input placeholder="" />
               )}
             </FormItem>
           </Col>
-          <Col md={7} sm={24}>
-            <FormItem label="创建时间">
-              {getFieldDecorator('range_date')(
-                <RangePicker />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">查询</Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
@@ -353,36 +302,45 @@ export default class AppList extends PureComponent {
     return this.state.expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
 
-  // 刷新列表
-  reloadList = () => {
+  stopTask = (e) => {
+    if (!confirm('是否要停止这单的所有任务?')) {
+      return true
+    }
+
+    const task_id = e.target.getAttribute('data-id')
+
     this.props.dispatch({
-      type: 'app/fetch',
-      payload: {},
+      type: 'task/stop_task',
+      payload: { task_id },
     });
   }
 
-  openComment = () => {
+  // 刷新列表
+  reloadList = () => {
     this.props.dispatch({
-      type: 'app/openComment',
+      type: 'task/fetch_spare_tasks',
       payload: {},
     });
   }
 
   // 上传文件
-  handleUploadFile = ({ file, fileList }) => {
+  handleUploadEmail = ({ file, fileList }) => {
     if (file.status !== 'uploading') {
       const response = file.response
       if (response.error_code != 0) {
-        message.success('导入机刷结果成功,成功数:' + response.success_num, 5);
+        message.success('导入评论成功' + response.content, 6000);
+        this.setState({
+          message: '结果：' + response.content
+        })
       } else {
-        message.error('导入机刷结果失败');
+        message.error('导入评论失败');
       }
       return response
     }
   }
 
   render() {
-    const { app: { loading: loading, data }, form: { getFieldDecorator, getFieldValue } } = this.props;
+    const { task: { loading: loading, spareTask }, form: { getFieldDecorator, getFieldValue } } = this.props;
     const { selectedRows, modalVisible, addInputValue } = this.state;
 
     const menu = (
@@ -394,18 +352,30 @@ export default class AppList extends PureComponent {
 
     // 配置栏目
     const columns = [
-      {
-        fixed: 'left',
-        title: '关键词',
-        width: 90,
-        dataIndex: 'keyword',
-        render: (val, record) => {
-          return <Link to={"/app/hourl_stat?app_id=" + record.id}>{val}</Link>
-        },
-      },
+      // {
+      //   title: '操作',
+      //   width: 250,
+      //   render: (text, record) => (
+      //     <p>
+      //       <Link to={"/task/add_task_keyword?task_id=" + record.id}>新增任务</Link>
+      //       <span className={styles.splitLine} />
+      //       <Link to={"/app/list?task_id=" + record.id}>任务列表</Link>
+      //       <span className={styles.splitLine} />
+      //       <Link to="" onClick={this.stopTask} data-id={record.id}>停止所有</Link>
+      //       <span className={styles.splitLine} />
+      //       <Upload
+      //         name="upload_email"
+      //         headers={{ Authorization: 'Bearer ' + localStorage.token }}
+      //         onChange={this.handleUploadEmail}
+      //         action={uploadUrl + '?appid=' + record.appid}>
+      //         <a>导入评论</a>
+      //       </Upload>
+      //     </p>
+      //   ),
+      // },
       {
         title: 'app名',
-        width: 90,
+        width: 150,
         dataIndex: 'app_name',
       },
       {
@@ -414,95 +384,45 @@ export default class AppList extends PureComponent {
         dataIndex: 'appid',
       },
       {
-        width: 60,
-        title: '任务id',
-        dataIndex: 'id',
-      },
-      {
-        title: '下单人',
+        title: '关键词',
         width: 80,
-        dataIndex: 'user_name',
+        dataIndex: 'keyword',
       },
       {
-        title: '剩余量',
-        width: 50,
-        dataIndex: 'brush_num',
+        title: '状态',
+        width: 100,
+        dataIndex: 'status',
+        render: (val, record) => {
+          switch (val) {
+            case 0:
+              return '未开始'
+            case 1:
+              return <Link to={"/app/list?id=" + record.id}>{"已开始但手机还差" + record.remain_mobile_num}</Link>
+            case 2:
+              return <Link to={"/app/list?id=" + record.app_id}>已开始</Link>
+              break;
+          }
+        },
       },
       {
-        title: '已完成量',
-        width: 50,
-        dataIndex: 'hour_success_num',
-      },
-      {
-        title: '下单量',
-        width: 50,
+        title: '下单总量',
+        width: 80,
         dataIndex: 'success_num',
       },
       {
-        title: '实际结束',
-        width: 100,
-        dataIndex: 'real_end_time',
-        render: val => !val ? '进行中' : moment(val).format('YYYY-MM-DD HH:mm'),
-      },
-      {
-        title: '实际总打量',
-        dataIndex: 'brushed_num',
-        render: (val, record) => {
-          return !record.is_brushing ? val : '进行中'
-        }
-      },
-      {
-        title: '成功打量',
-        dataIndex: 'success_brushed_num',
-        render: val => val ? val : '进行中',
-      },
-      {
-        title: '失败打量',
-        dataIndex: 'fail_brushed_num',
-        render: val => val ? val : '进行中',
-      },
-      {
         title: '手机数量',
+        width: 80,
         dataIndex: 'mobile_num',
       },
       {
-        title: '打量开始',
-        dataIndex: 'start_time',
-        render: val => moment(val).format('YYYY-MM-DD HH:mm'),
-      },
-      {
-        title: '打量结束',
-        dataIndex: 'end_time',
-        render: val => moment(val).format('YYYY-MM-DD HH:mm'),
-      },
-      {
-        title: '手机组id',
-        dataIndex: 'mobile_group_id',
+        title: '下单人',
+        width: 100,
+        dataIndex: 'user_name',
       },
       {
         title: '创建时间',
-        dataIndex: 'create_time',
-        render: val => moment(val).format('YYYY-MM-DD HH:mm'),
-      },
-      {
-        fixed: 'right',
-        width: 60,
-        title: '操作',
-        render: (text, record) => (
-          <div style={{ display:'flex'}}>
-          <p>
-            {moment(record.end_time).isBefore(moment())
-              ? ''
-              : <Button type="danger" onClick={this.stopTask} data-app-id={record.id}>停止</Button>
-            }
-          </p>
-          {/*
-          <p>
-              <Button type="default" onClick={this.openComment} data-app-id={record.id}>开启评论</Button>
-            </p>
-            */}
-            </div>
-        ),
+        dataIndex: 'created_at',
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
     ];
 
@@ -520,7 +440,7 @@ export default class AppList extends PureComponent {
     };
 
     return (
-      <PageHeaderLayout title="任务列表">
+      <PageHeaderLayout title="下单列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
@@ -535,17 +455,8 @@ export default class AppList extends PureComponent {
               >
                 <Icon type="reload" /> 刷新
               </Button>
-              <Button icon="export" type="primary" onClick={this.exportApp}>导出机刷统计</Button>
-              {/*<Upload
-                name="upload_file"
-                headers={{ Authorization: 'Bearer ' + localStorage.token }}
-                onChange={this.handleUploadFile}
-                action={uploadUrl}>
-                <Button type="primary">
-                  <Icon type="upload" /> 导入机刷结果
-                </Button>
-              </Upload>
-   <Tag color="red">先点击“导出机刷统计”，填写好机刷结果(现排名，在榜时长，在榜开始，在榜结束)，再点击“导入机刷结果”</Tag>*/}
+
+              <Link to="/task/step_add_task"><Button icon="plus" type="primary">新建</Button></Link>
               {
                 selectedRows.length > 0 && (
                   <span>
@@ -562,14 +473,49 @@ export default class AppList extends PureComponent {
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
-              id="app_list"
-              data={data}
+              data={spareTask}
               columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
             />
           </div>
         </Card>
+        <Modal
+          title="新建"
+          visible={modalVisible}
+          onOk={this.handleAdd}
+          onCancel={() => this.handleModalVisible()}
+        >
+          <Form
+            onSubmit={this.handleAdd}
+            hideRequiredMark
+            style={{ marginTop: 8 }}
+          >
+            <FormItem
+              {...formItemLayout}
+              label="app名称"
+            >
+              {getFieldDecorator('app_name', {
+                rules: [{
+                }],
+              })(
+                <Input placeholder="请输入app名称" />
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="appid"
+            >
+              {getFieldDecorator('appid', {
+                rules: [{
+                  required: true, message: '必填',
+                }],
+              })(
+                <Input placeholder="请输入appid" />
+              )}
+            </FormItem>
+          </Form>
+        </Modal>
       </PageHeaderLayout>
     );
   }

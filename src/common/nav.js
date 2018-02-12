@@ -37,6 +37,7 @@ import TaskList from '../routes/Task/TaskList';
 import StepAddTask from '../routes/Task/StepAddTask';
 import AddTaskStep2 from '../routes/Task/StepAddTask/Step2';
 import AddSpareTask from '../routes/Task/AddSpareTask';
+import SpareTasks from '../routes/Task/SpareTasks';
 
 // import TaskKeywordList from '../routes/TaskKeyword/TaskKeywordList';
 import AddTaskKeyword from '../routes/TaskKeyword/AddTaskKeyword';
@@ -45,11 +46,14 @@ import AppList from '../routes/App/AppList';
 import HourlStat from '../routes/App/HourlStat';
 import DailyStat from '../routes/App/DailyStat';
 
+
 import EmailImport from '../routes/Email/EmailImport';
 import AppleidImport from '../routes/Email/AppleidImport';
 import StateImport from '../routes/Email/StateImport';
 
 import BrushIdfaAdd from '../routes/BrushIdfa/Add';
+
+
 
 const data = [{
   component: BasicLayout,
@@ -93,9 +97,13 @@ const data = [{
       path: 'add_task_keyword',
       component: AddTaskKeyword,
     }, {
+      name: '空闲列表',
+      path: 'spare_tasks',
+      component: SpareTasks,
+    }, {
       name: '新建空闲任务',
       path: 'add_spare_task',
-        component: AddSpareTask,
+      component: AddSpareTask,
     }],
 
   }, {
@@ -147,7 +155,7 @@ const data = [{
       path: 'add',
       component: BrushIdfaAdd,
     },
-  ]
+    ]
   },
     /* }, {
         name: '表单页',

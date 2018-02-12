@@ -19,11 +19,13 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import querystring from 'querystring';
+import { domain } from '../../config'
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import StandardTable from '../../components/StandardTable';
 
 import styles from './AppList.less';
+const { RangePicker } = DatePicker; // 日期
 
 @connect(state => ({
     app: state.app,
@@ -52,7 +54,7 @@ export default class DailyStat extends PureComponent {
         if (location.search) {
             query_params = querystring.parse(location.search.replace('?', ''))
         }
-        console.log(1)
+
         dispatch({
             type: 'app/fetchDailyStat',
             payload: query_params,
@@ -138,14 +140,17 @@ export default class DailyStat extends PureComponent {
 
         form.validateFields((err, fieldsValue) => {
             if (err) return;
+            let values = {}
+            if (fieldsValue.range_date) {
+                values['start_date'] = fieldsValue.range_date[0].format('YYYY-MM-DD')
+                values['end_date'] = fieldsValue.range_date[1].format('YYYY-MM-DD')
+            }
+            delete fieldsValue.range_date
 
-            const values = {
-                ...fieldsValue,
-                updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-            };
+            fieldsValue = Object.assign({}, fieldsValue, values)
 
             this.setState({
-                formValues: values,
+                formValues: fieldsValue,
             });
 
             dispatch({
@@ -203,6 +208,13 @@ export default class DailyStat extends PureComponent {
                         <FormItem label="appid">
                             {getFieldDecorator('appid')(
                                 <Input placeholder="请输入" />
+                            )}
+                        </FormItem>
+                    </Col>
+                    <Col md={8} sm={24}>
+                        <FormItem label="日期">
+                            {getFieldDecorator('range_date')(
+                                <RangePicker />
                             )}
                         </FormItem>
                     </Col>
@@ -303,7 +315,12 @@ export default class DailyStat extends PureComponent {
             payload: {},
         });
     }
-    
+
+    exportApp = (e) => {
+        const export_url = domain + '/backend/app/exportDaily?token=' + localStorage.token + '&' + querystring.stringify(this.state.formValues)
+        location.href = export_url
+    }
+
     render() {
         const { app: { loading: loading, daily_stat }, form: { getFieldDecorator, getFieldValue } } = this.props;
         const { selectedRows, modalVisible, addInputValue } = this.state;
@@ -398,6 +415,7 @@ export default class DailyStat extends PureComponent {
                             >
                                 <Icon type="reload" /> 刷新
                             </Button>
+                            <Button icon="export" type="primary" onClick={this.exportApp}>导出机刷统计</Button>
                             {/*
                                 selectedRows.length > 0 && (
                                     <span>

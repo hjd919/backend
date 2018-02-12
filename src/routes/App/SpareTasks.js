@@ -13,7 +13,6 @@ import {
   Select,
   Tag,
   Upload,
-  Radio,
   message,
 } from 'antd';
 import { Link } from 'dva/router';
@@ -157,15 +156,6 @@ export default class AppList extends PureComponent {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
 
-      let values = {}
-      if (fieldsValue.range_date){
-        values['start_date'] = fieldsValue.range_date[0].format('YYYY-MM-DD')
-        values['end_date'] = fieldsValue.range_date[1].format('YYYY-MM-DD')
-      }
-      delete fieldsValue.range_date
-
-      fieldsValue = Object.assign({}, fieldsValue, values)
-      
       this.setState({
         formValues: fieldsValue,
       });
@@ -239,13 +229,10 @@ export default class AppList extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={6} sm={24}>
-            <FormItem label="评论">
-              {getFieldDecorator('is_comment')(
-                <Radio.Group>
-                  <Radio value="0">不是</Radio>
-                  <Radio value="1">是</Radio>
-                </Radio.Group>
+          <Col md={5} sm={24}>
+            <FormItem label="任务id">
+              {getFieldDecorator('id')(
+                <Input placeholder="" />
               )}
             </FormItem>
           </Col>
@@ -256,7 +243,7 @@ export default class AppList extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={7} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="创建时间">
               {getFieldDecorator('range_date')(
                 <RangePicker />

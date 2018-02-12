@@ -65,6 +65,11 @@ export async function addSpareTask(params) {
   });
 }
 
+export async function querySpareTask(params) {
+  return requestAuthApi('/backend/task/querySpareTask', { query: params });
+}
+
+
 export async function saveBrushIdfa(params) {
   return requestAuthApi('/backend/brush_idfa/save', {
     method: 'POST',

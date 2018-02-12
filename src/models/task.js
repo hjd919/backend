@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { addSpareTask, queryTask, getFreeMobileNum, saveTaskKeyword, saveTask, stopAllTask } from '../services/task';
+import { querySpareTask, addSpareTask, queryTask, getFreeMobileNum, saveTaskKeyword, saveTask, stopAllTask } from '../services/task';
 import { routerRedux } from 'dva/router';
 
 export default {
@@ -11,20 +11,50 @@ export default {
       list: [],
       pagination: {},
     },
+    spareTask: {
+      list: [],
+      pagination: {},
+    },
     form: {
       task_id: 0,
       app_name: '',
       keywords: {},
       free_mobile_num: 0,
       usable_brush_num: 10000,
-      real_used_mobile_num:0,
-      useful_comment_num:0,
+      real_used_mobile_num: 0,
+      useful_comment_num: 0,
     },
     success_keyword_list: [],
     loading: true,
   },
 
   effects: {
+    *fetch_spare_tasks({ payload }, { call, put, select }) {
+      yield put({
+        type: 'changeLoading',
+        payload: true,
+      });
+
+      // 合并store查询参数到payload
+      const query_params = yield select(state => state.task.query_params);
+      payload = { ...query_params, ...payload }
+
+      // 设置查询参数到store
+      yield put({
+        type: 'setQueryParams',
+        payload: payload,
+      });
+
+      const response = yield call(querySpareTask, payload);
+      yield put({
+        type: 'fetchSpareTaskSuccess',
+        payload: response,
+      });
+      yield put({
+        type: 'changeLoading',
+        payload: false,
+      });
+    },
     *fetch({ payload }, { call, put, select }) {
       yield put({
         type: 'changeLoading',
@@ -140,6 +170,12 @@ export default {
       return {
         ...state,
         data: action.payload,
+      };
+    },
+    fetchSpareTaskSuccess(state, action) {
+      return {
+        ...state,
+        spareTask: action.payload,
       };
     },
     getFreeMobileNumSuccess(state, action) {
