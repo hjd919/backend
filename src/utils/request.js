@@ -27,7 +27,7 @@ function checkStatus(response) {
  */
 export default function request(url, options) {
   const defaultOptions = {
-    credentials: 'include',
+    // credentials: 'include',
   };
   const newOptions = { ...defaultOptions, ...options };
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
@@ -62,15 +62,14 @@ export default function request(url, options) {
 }
 
 export function requestApi(url, options) {
-  return request(domain + url, options)
+  return request(domain + url, options);
 }
 
 export function requestAuthApi(url, options = {}) {
-
   // 从localStorage获取token,附加到请求header参数中
   options.headers = {
-    Authorization: 'Bearer ' + localStorage.token
-  }
+    Authorization: `Bearer ${localStorage.token}`,
+  };
 
-  return requestApi(url, options)
+  return requestApi(url, options);
 }

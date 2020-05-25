@@ -104,8 +104,5 @@
       "\\.(css|less)$": "<rootDir>/tests/styleMock.js"
     }
   },
-  "lint-staged": {
-    "**/*.{js,jsx}": "lint-staged:js",
-    "**/*.less": "stylelint --syntax less"
-  }
+  "lint-staged": {}
 }
